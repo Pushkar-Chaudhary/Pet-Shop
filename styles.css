@@ -1,0 +1,112 @@
+.welcome{
+    font-size: 24px;
+    color: #198f36;
+    text-align: center;
+    margin-top: 20px;
+    font-weight: bold;
+    font-family: Poppins, sans-serif;
+}
+.animal {
+    border: 2px solid #ccc;
+    border-radius: 10px;
+    padding: 15px;
+    margin: 15px;
+    text-align: center;
+    font-family: Poppins, sans-serif;
+    box-shadow: 2px 2px 12px rgba(0, 0, 0, 0.1);
+    max-height: 300px;
+    max-width: 200px;
+    display: inline-block;
+  
+}
+
+.animal a {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 8px 12px;
+    background-color: #198f36;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-family: Poppins, sans-serif;
+}
+.buy-page {
+    background-color: #f9f9f9;
+    font-family: Poppins, sans-serif;
+    padding: 20px;
+}
+.animalstopurchase {
+    text-align: center;
+}
+.animalstopurchase .animal {
+    margin: 20px;
+}
+.animal a:hover {
+    background-color: #145d24;
+
+}
+.animal a:active {
+    background-color: #0f3e19;
+}
+.animal img {
+    border-radius: 10px;
+}
+.buy-page h1 {
+    color: #198f36;
+}
+.buy-page input[type="submit"] {
+    background-color: #198f36;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-family: Poppins, sans-serif;
+}
+.buy-page input[type="submit"]:hover {
+    background-color: #145d24;
+}
+.buy-page input[type="submit"]:active {
+    background-color: #0f3e19;
+}
+.accessory {
+    border: 2px solid #ccc;
+    border-radius: 10px;
+    padding: 15px;
+    margin: 15px;
+    text-align: center;
+    font-family: Poppins, sans-serif;
+    box-shadow: 2px 2px 12px rgba(0, 0, 0, 0.1);
+    max-height: 300px;
+    max-width: 200px;
+    display: inline-block;
+}
+.accessory a {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 8px 12px;
+    background-color: #198f36;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-family: Poppins, sans-serif;
+}
+.accessory a:hover {
+    background-color: #145d24;
+
+
+}
+.p{
+    font-family: Poppins, sans-serif;
+    font-weight: bold;
+}
+.accesories{
+    text-align: center;
+    display: inline-block;
+    margin-top: 20px;
+    
+
+}
+.accessory img {
+    border-radius: 10px;
+}
