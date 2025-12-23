@@ -1,112 +1,88 @@
-.welcome{
-    font-size: 24px;
-    color: #198f36;
-    text-align: center;
-    margin-top: 20px;
-    font-weight: bold;
-    font-family: Poppins, sans-serif;
-}
-.animal {
-    border: 2px solid #ccc;
-    border-radius: 10px;
-    padding: 15px;
-    margin: 15px;
-    text-align: center;
-    font-family: Poppins, sans-serif;
-    box-shadow: 2px 2px 12px rgba(0, 0, 0, 0.1);
-    max-height: 300px;
-    max-width: 200px;
-    display: inline-block;
-  
-}
-
-.animal a {
-    display: inline-block;
-    margin-top: 10px;
-    padding: 8px 12px;
-    background-color: #198f36;
-    color: white;
-    text-decoration: none;
-    border-radius: 5px;
-    font-family: Poppins, sans-serif;
-}
-.buy-page {
+/* General Styles */
+body {
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    padding: 0;
     background-color: #f9f9f9;
-    font-family: Poppins, sans-serif;
-    padding: 20px;
+    color: #333;
 }
-.animalstopurchase {
-    text-align: center;
-}
-.animalstopurchase .animal {
-    margin: 20px;
-}
-.animal a:hover {
-    background-color: #145d24;
 
-}
-.animal a:active {
-    background-color: #0f3e19;
-}
-.animal img {
-    border-radius: 10px;
-}
-.buy-page h1 {
-    color: #198f36;
-}
-.buy-page input[type="submit"] {
-    background-color: #198f36;
-    color: white;
-    padding: 10px 15px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-family: Poppins, sans-serif;
-}
-.buy-page input[type="submit"]:hover {
-    background-color: #145d24;
-}
-.buy-page input[type="submit"]:active {
-    background-color: #0f3e19;
-}
-.accessory {
-    border: 2px solid #ccc;
-    border-radius: 10px;
-    padding: 15px;
-    margin: 15px;
+/* Welcome Section */
+.welcome {
     text-align: center;
-    font-family: Poppins, sans-serif;
-    box-shadow: 2px 2px 12px rgba(0, 0, 0, 0.1);
-    max-height: 300px;
-    max-width: 200px;
-    display: inline-block;
+    padding: 50px 20px;
+    background: linear-gradient(to right, #ffecd2, #fcb69f);
 }
-.accessory a {
+
+.welcome h1 {
+    font-size: 3em;
+    margin-bottom: 10px;
+}
+
+.welcome p {
+    font-size: 1.2em;
+}
+
+/* Product Sections */
+.animalstopurchase, .accessories {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+    padding: 40px 20px;
+}
+
+.animal, .accessory {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    text-align: center;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.animal:hover, .accessory:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 25px rgba(0,0,0,0.2);
+}
+
+.animal img, .accessory img {
+    border-radius: 10px;
+    margin-bottom: 15px;
+}
+
+.animal p, .accessory p {
+    font-size: 0.95em;
+    margin-bottom: 15px;
+}
+
+.animal a, .accessory a {
     display: inline-block;
-    margin-top: 10px;
-    padding: 8px 12px;
-    background-color: #198f36;
+    padding: 10px 20px;
+    background-color: #ff7f50;
     color: white;
     text-decoration: none;
-    border-radius: 5px;
-    font-family: Poppins, sans-serif;
+    border-radius: 50px;
+    transition: background-color 0.3s;
 }
-.accessory a:hover {
-    background-color: #145d24;
 
+.animal a:hover, .accessory a:hover {
+    background-color: #ff5722;
+}
 
-}
-.p{
-    font-family: Poppins, sans-serif;
-    font-weight: bold;
-}
-.accesories{
+/* Section Titles */
+.accessories .p {
+    font-size: 1.5em;
+    margin-bottom: 20px;
     text-align: center;
-    display: inline-block;
-    margin-top: 20px;
-    
-
 }
-.accessory img {
-    border-radius: 10px;
+
+/* Responsive */
+@media (max-width: 600px) {
+    .welcome h1 {
+        font-size: 2em;
+    }
+
+    .welcome p {
+        font-size: 1em;
+    }
 }

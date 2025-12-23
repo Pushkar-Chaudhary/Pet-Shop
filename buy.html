@@ -3,25 +3,83 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Purchase Pet</title>
     <link rel="stylesheet" href="styles.css">
-     
-    <title>Buy</title>
+    <style>
+        /* Buy page specific styles */
+        .buy-container {
+            max-width: 500px;
+            margin: 50px auto;
+            background: #fff;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+
+        .buy-container h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #ff7f50;
+        }
+
+        .buy-container form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .buy-container input, 
+        .buy-container button {
+            padding: 12px 15px;
+            margin: 10px 0;
+            border-radius: 50px;
+            border: 1px solid #ccc;
+            font-size: 1em;
+        }
+
+        .buy-container button {
+            background-color: #ff7f50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .buy-container button:hover {
+            background-color: #ff5722;
+        }
+    </style>
 </head>
-<body class="buy-page">
-    <h1>Purchase Page</h1>
-    <p>Thank you for choosing to buy from our Pet Shop! Please proceed with your payment details.</p>
-    <form action="#" method="post">
-        <label for="name">Name:</label><br>
-        <input type="text" id="name" name="name" required><br><br>
-        <label for="address">Address:</label><br>
-        <input type="text" id="address" name="address" required><br><br>
-        <label for="payment">Payment Method:</label><br>
-        <select id="payment" name="payment" required>
-            <option value="credit-card">Bank Transfer</option>
-            <option value="paypal">Esewa</option>
-            <option value="bank-transfer">Cah On Delivery</option>
-        </select><br><br>
-        <input type="submit" value="Confirm Purchase">
-    
+<body>
+
+<div class="buy-container">
+    <h2>Confirm Your Purchase</h2>
+    <form id="buyForm">
+        <input type="text" name="product" value="Selected Pet/Product" readonly>
+        <input type="text" name="buyer" placeholder="Your Name" required>
+        <input type="email" name="email" placeholder="Your Email" required>
+        <button type="submit">Buy Now</button>
+    </form>
+</div>
+
+<!-- EmailJS -->
+<script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+<script>
+    (function(){
+        emailjs.init("pushkarchaudhary256@gmail.com"); 
+    })();
+
+    const form = document.getElementById('buyForm');
+    form.addEventListener('submit', function(e){
+        e.preventDefault();
+        emailjs.sendForm('YOUR_SERVICE_ID','YOUR_TEMPLATE_ID', this)
+        .then(function(){
+            alert('Purchase confirmed! You will receive notification.');
+            form.reset();
+        }, function(error){
+            alert('Failed to send notification: ' + error);
+        });
+    });
+</script>
+
 </body>
 </html>

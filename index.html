@@ -88,6 +88,14 @@
         <p>Fun toys to keep your pets entertained and active.</p>
          <a href="buy.html" target="_self">Buy Now</a></div>
         </section></section>
+        <script>
+  const urlParams = new URLSearchParams(window.location.search);
+  const product = urlParams.get('product');
+  if(product){
+      document.querySelector('input[name="product"]').value = product;
+  }
+</script>
+
     
 
     
