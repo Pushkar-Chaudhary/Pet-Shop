@@ -4,9 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Purchase Pet</title>
-    <link rel="stylesheet" href="styles.css">
+
     <style>
-        /* Buy page specific styles */
+        body {
+            background: #f5f5f5;
+            font-family: Arial, sans-serif;
+        }
+
         .buy-container {
             max-width: 500px;
             margin: 50px auto;
@@ -22,18 +26,14 @@
             color: #ff7f50;
         }
 
-        .buy-container form {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .buy-container input, 
+        .buy-container input,
         .buy-container button {
             padding: 12px 15px;
             margin: 10px 0;
             border-radius: 50px;
             border: 1px solid #ccc;
             font-size: 1em;
+            width: 100%;
         }
 
         .buy-container button {
@@ -41,7 +41,6 @@
             color: white;
             border: none;
             cursor: pointer;
-            transition: background-color 0.3s;
         }
 
         .buy-container button:hover {
@@ -53,33 +52,56 @@
 
 <div class="buy-container">
     <h2>Confirm Your Purchase</h2>
+
     <form id="buyForm">
-        <input type="text" name="product" value="Selected Pet/Product" readonly>
-        <input type="text" name="buyer" placeholder="Your Name" required>
-        <input type="email" name="email" placeholder="Your Email" required>
+        <input type="text" id="product" name="product_name" readonly>
+        <input type="text" name="buyer_name" placeholder="Your Name" required>
+        <input type="email" name="buyer_email" placeholder="Your Email" required>
         <button type="submit">Buy Now</button>
     </form>
 </div>
 
 <!-- EmailJS -->
-<script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+
 <script>
-    (function(){
-        emailjs.init("pushkarchaudhary256@gmail.com"); 
+    // 🔹 EmailJS Init
+    (function () {
+        emailjs.init("YOUR_PUBLIC_KEY");
     })();
 
-    const form = document.getElementById('buyForm');
-    form.addEventListener('submit', function(e){
+    // 🔹 Auto-fill product from URL
+    const params = new URLSearchParams(window.location.search);
+    const petName = params.get("pet") || "Selected Pet/Product";
+    document.getElementById("product").value = petName;
+
+    // 🔹 Form Submit
+    const form = document.getElementById("buyForm");
+
+    form.addEventListener("submit", function (e) {
         e.preventDefault();
-        emailjs.sendForm('YOUR_SERVICE_ID','YOUR_TEMPLATE_ID', this)
-        .then(function(){
-            alert('Purchase confirmed! You will receive notification.');
-            form.reset();
-        }, function(error){
-            alert('Failed to send notification: ' + error);
-        });
+
+        emailjs.sendForm(
+            "YOUR_SERVICE_ID",
+            "YOUR_TEMPLATE_ID",
+            this
+        ).then(
+            function () {
+                alert("✅ Purchase confirmed!");
+                window.location.href = "success.html";
+            },
+            function (error) {
+                alert("❌ Email failed: " + error.text);
+            }
+        );
     });
 </script>
 
 </body>
 </html>
+<script>
+  const urlParams = new URLSearchParams(window.location.search);
+  const product = urlParams.get('product');
+  if(product){
+      document.querySelector('input[name="product"]').value = product;
+  }
