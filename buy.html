@@ -1,107 +1,162 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Purchase Pet</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Purchase Pet</title>
 
-    <style>
-        body {
-            background: #f5f5f5;
-            font-family: Arial, sans-serif;
-        }
+<style>
+body {
+    background: #f5f5f5;
+    font-family: Arial, sans-serif;
+}
 
-        .buy-container {
-            max-width: 500px;
-            margin: 50px auto;
-            background: #fff;
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-        }
+.buy-container {
+    max-width: 500px;
+    margin: 50px auto;
+    background: #fff;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+}
 
-        .buy-container h2 {
-            text-align: center;
-            margin-bottom: 20px;
-            color: #ff7f50;
-        }
+.buy-container h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #ff7f50;
+}
 
-        .buy-container input,
-        .buy-container button {
-            padding: 12px 15px;
-            margin: 10px 0;
-            border-radius: 50px;
-            border: 1px solid #ccc;
-            font-size: 1em;
-            width: 100%;
-        }
+.buy-container input,
+.buy-container select,
+.buy-container button {
+    padding: 12px 15px;
+    margin: 10px 0;
+    border-radius: 50px;
+    border: 1px solid #ccc;
+    font-size: 1em;
+    width: 100%;
+}
 
-        .buy-container button {
-            background-color: #ff7f50;
-            color: white;
-            border: none;
-            cursor: pointer;
-        }
+.price-box {
+    text-align: center;
+    font-size: 1.1em;
+    margin: 10px 0;
+    color: #333;
+}
 
-        .buy-container button:hover {
-            background-color: #ff5722;
-        }
-    </style>
+.buy-container button {
+    background-color: #ff7f50;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.buy-container button:hover {
+    background-color: #ff5722;
+    transform: scale(1.03);
+}
+</style>
 </head>
 <body>
 
 <div class="buy-container">
-    <h2>Confirm Your Purchase</h2>
+<h2>Confirm Your Purchase</h2>
 
-    <form id="buyForm">
-        <input type="text" id="product" name="product_name" readonly>
-        <input type="text" name="buyer_name" placeholder="Your Name" required>
-        <input type="email" name="buyer_email" placeholder="Your Email" required>
-        <button type="submit">Buy Now</button>
-    </form>
+<form id="buyForm">
+    
+    <!-- Product selection -->
+    <select id="product" name="product_name" required>
+        <option value="" disabled selected>Select a product</option>
+        <option value="Judging Cat" data-price="300">Judging Cat 🐱</option>
+        <option value="Lazy Cat" data-price="280">Lazy Cat 😴</option>
+        <option value="Fluffy Cat" data-price="350">Fluffy Cat 🧸</option>
+        <option value="Friendly Dog" data-price="450">Friendly Dog 🐶</option>
+        <option value="Pet Food Pack" data-price="120">Pet Food Pack 🍖</option>
+        <option value="Pet Carrier" data-price="200">Pet Carrier 🎒</option>
+    </select>
+
+    <!-- Quantity -->
+    <input type="number" id="quantity" name="quantity" value="1" min="1" required>
+
+    <!-- Price display -->
+    <div class="price-box">
+        Total Price: ₹<span id="total">0</span>
+    </div>
+
+    <!-- Buyer details -->
+    <input type="text" name="buyer_name" placeholder="Your Name" required>
+    <input type="email" name="buyer_email" placeholder="Your Email" required>
+
+    <!-- Hidden price field for email -->
+    <input type="hidden" id="priceField" name="total_price">
+
+    <button type="submit">Buy Now</button>
+</form>
 </div>
 
 <!-- EmailJS -->
 <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
 
 <script>
-    // 🔹 EmailJS Init
-    (function () {
-        emailjs.init("YOUR_PUBLIC_KEY");
-    })();
+/* EmailJS Init */
+(function () {
+    emailjs.init("YOUR_PUBLIC_KEY");
+})();
 
-    // 🔹 Auto-fill product from URL
-    const params = new URLSearchParams(window.location.search);
-    const petName = params.get("pet") || "Selected Pet/Product";
-    document.getElementById("product").value = petName;
+/* Elements */
+const productSelect = document.getElementById("product");
+const qtyInput = document.getElementById("quantity");
+const totalText = document.getElementById("total");
+const priceField = document.getElementById("priceField");
 
-    // 🔹 Form Submit
-    const form = document.getElementById("buyForm");
+/* Price calculation */
+function updatePrice() {
+    const selected = productSelect.options[productSelect.selectedIndex];
+    const price = selected ? selected.dataset.price || 0 : 0;
+    const qty = qtyInput.value || 1;
+    const total = price * qty;
 
-    form.addEventListener("submit", function (e) {
-        e.preventDefault();
+    totalText.textContent = total;
+    priceField.value = "₹" + total;
+}
 
-        emailjs.sendForm(
-            "YOUR_SERVICE_ID",
-            "YOUR_TEMPLATE_ID",
-            this
-        ).then(
-            function () {
-                alert("✅ Purchase confirmed!");
-                window.location.href = "success.html";
-            },
-            function (error) {
-                alert("❌ Email failed: " + error.text);
-            }
-        );
+productSelect.addEventListener("change", updatePrice);
+qtyInput.addEventListener("input", updatePrice);
+
+/* Auto-select product from URL */
+const params = new URLSearchParams(window.location.search);
+const pet = params.get("pet");
+
+if (pet) {
+    [...productSelect.options].forEach(opt => {
+        if (opt.value.toLowerCase() === pet.toLowerCase()) {
+            opt.selected = true;
+        }
     });
+    updatePrice();
+}
+
+/* Form submit */
+document.getElementById("buyForm").addEventListener("submit", function (e) {
+    e.preventDefault();
+
+    emailjs.sendForm(
+        "YOUR_SERVICE_ID",
+        "YOUR_TEMPLATE_ID",
+        this
+    ).then(
+        () => {
+            alert("✅ Purchase confirmed!");
+            window.location.href = "success.html";
+        },
+        error => {
+            alert("❌ Email failed: " + error.text);
+        }
+    );
+});
 </script>
 
 </body>
 </html>
-<script>
-  const urlParams = new URLSearchParams(window.location.search);
-  const product = urlParams.get('product');
-  if(product){
-      document.querySelector('input[name="product"]').value = product;
-  }
+</div>
