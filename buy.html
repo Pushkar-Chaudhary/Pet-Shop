@@ -1,162 +1,71 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Purchase Pet</title>
-
-<style>
-body {
-    background: #f5f5f5;
-    font-family: Arial, sans-serif;
-}
-
-.buy-container {
-    max-width: 500px;
-    margin: 50px auto;
-    background: #fff;
-    padding: 30px;
-    border-radius: 15px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-}
-
-.buy-container h2 {
-    text-align: center;
-    margin-bottom: 20px;
-    color: #ff7f50;
-}
-
-.buy-container input,
-.buy-container select,
-.buy-container button {
-    padding: 12px 15px;
-    margin: 10px 0;
-    border-radius: 50px;
-    border: 1px solid #ccc;
-    font-size: 1em;
-    width: 100%;
-}
-
-.price-box {
-    text-align: center;
-    font-size: 1.1em;
-    margin: 10px 0;
-    color: #333;
-}
-
-.buy-container button {
-    background-color: #ff7f50;
-    color: white;
-    border: none;
-    cursor: pointer;
-    transition: transform 0.2s;
-}
-
-.buy-container button:hover {
-    background-color: #ff5722;
-    transform: scale(1.03);
-}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Purchase Pet</title>
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <!-- LINK TO CSS -->
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
 <div class="buy-container">
-<h2>Confirm Your Purchase</h2>
-
-<form id="buyForm">
+    <h2>Confirm Purchase</h2>
     
-    <!-- Product selection -->
-    <select id="product" name="product_name" required>
-        <option value="" disabled selected>Select a product</option>
-        <option value="Judging Cat" data-price="300">Judging Cat 🐱</option>
-        <option value="Lazy Cat" data-price="280">Lazy Cat 😴</option>
-        <option value="Fluffy Cat" data-price="350">Fluffy Cat 🧸</option>
-        <option value="Friendly Dog" data-price="450">Friendly Dog 🐶</option>
-        <option value="Pet Food Pack" data-price="120">Pet Food Pack 🍖</option>
-        <option value="Pet Carrier" data-price="200">Pet Carrier 🎒</option>
-    </select>
+    <form id="buyForm">
+        <!-- Product Selection -->
+        <label>Choose Product:</label>
+        <select id="product" name="product_name" required>
+            <option value="" disabled selected>Select a product</option>
+            <!-- Cats -->
+            <option value="Judging Cat" data-price="300">Judging Cat 🐱</option>
+            <option value="Lazy Cat" data-price="280">Lazy Cat 😴</option>
+            <option value="Cute Shorthair" data-price="350">Cute Shorthair 😸</option>
+            <option value="Short Legged Cat" data-price="400">Short Legged Cat 🐈</option>
+            <option value="Fluffy Cat" data-price="320">Fluffy Cat 🧸</option>
+            <!-- Dogs -->
+            <option value="Friendly Dog" data-price="450">Friendly Dog 🐶</option>
+            <option value="Loyal Dog" data-price="500">Loyal Dog 🐕</option>
+            <option value="Energetic Dog" data-price="480">Energetic Dog 🦮</option>
+            <!-- Accessories -->
+            <option value="Dog Food" data-price="120">Dog Food Pack 🍖</option>
+            <option value="Cat Food" data-price="110">Cat Food Pack 🐟</option>
+            <option value="Pet Collar" data-price="80">Pet Collar 📿</option>
+            <option value="Net Carrier" data-price="200">Net Carrier 🎒</option>
+            <option value="Shield Carrier" data-price="250">Shield Carrier 🛡️</option>
+            <option value="Pet Toys" data-price="150">Pet Toys 🎾</option>
+        </select>
 
-    <!-- Quantity -->
-    <input type="number" id="quantity" name="quantity" value="1" min="1" required>
+        <!-- Quantity -->
+        <label>Quantity:</label>
+        <input type="number" id="quantity" name="quantity" value="1" min="1" required>
 
-    <!-- Price display -->
-    <div class="price-box">
-        Total Price: ₹<span id="total">0</span>
-    </div>
+        <!-- Total Price Display -->
+        <div class="price-box">
+            Total: ₹<span id="total">0</span>
+        </div>
 
-    <!-- Buyer details -->
-    <input type="text" name="buyer_name" placeholder="Your Name" required>
-    <input type="email" name="buyer_email" placeholder="Your Email" required>
+        <!-- Buyer Info -->
+        <label>Your Name:</label>
+        <input type="text" name="buyer_name" placeholder="John Doe" required>
+        
+        <label>Your Email:</label>
+        <input type="email" name="buyer_email" placeholder="john@example.com" required>
 
-    <!-- Hidden price field for email -->
-    <input type="hidden" id="priceField" name="total_price">
+        <input type="hidden" id="priceField" name="total_price">
 
-    <button type="submit">Buy Now</button>
-</form>
+        <button type="submit" class="btn-buy">Buy Now</button>
+    </form>
 </div>
 
-<!-- EmailJS -->
+<!-- EmailJS Library (Optional) -->
 <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
 
-<script>
-/* EmailJS Init */
-(function () {
-    emailjs.init("YOUR_PUBLIC_KEY");
-})();
-
-/* Elements */
-const productSelect = document.getElementById("product");
-const qtyInput = document.getElementById("quantity");
-const totalText = document.getElementById("total");
-const priceField = document.getElementById("priceField");
-
-/* Price calculation */
-function updatePrice() {
-    const selected = productSelect.options[productSelect.selectedIndex];
-    const price = selected ? selected.dataset.price || 0 : 0;
-    const qty = qtyInput.value || 1;
-    const total = price * qty;
-
-    totalText.textContent = total;
-    priceField.value = "₹" + total;
-}
-
-productSelect.addEventListener("change", updatePrice);
-qtyInput.addEventListener("input", updatePrice);
-
-/* Auto-select product from URL */
-const params = new URLSearchParams(window.location.search);
-const pet = params.get("pet");
-
-if (pet) {
-    [...productSelect.options].forEach(opt => {
-        if (opt.value.toLowerCase() === pet.toLowerCase()) {
-            opt.selected = true;
-        }
-    });
-    updatePrice();
-}
-
-/* Form submit */
-document.getElementById("buyForm").addEventListener("submit", function (e) {
-    e.preventDefault();
-
-    emailjs.sendForm(
-        "YOUR_SERVICE_ID",
-        "YOUR_TEMPLATE_ID",
-        this
-    ).then(
-        () => {
-            alert("✅ Purchase confirmed!");
-            window.location.href = "success.html";
-        },
-        error => {
-            alert("❌ Email failed: " + error.text);
-        }
-    );
-});
-</script>
+<!-- LINK TO JS -->
+<script src="buy.js"></script>
 
 </body>
 </html>
-</div>

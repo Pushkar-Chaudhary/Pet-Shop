@@ -3,129 +3,185 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="styles.css">
     <title>Pet Shop</title>
-    <style>
-@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
-</style>
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+
+    <!-- HEADER -->
+    <header>
+        <a href="index.html" class="logo">Pet Shop 🐾</a>
+        <div class="cart-btn">
+            <i class="fas fa-shopping-cart"></i>
+            <span class="cart-count" id="cartCount">0</span>
+        </div>
+    </header>
+
+    <!-- WELCOME -->
     <div class="welcome">
-        <h1 >Welcome to the Pet Shop</h1>
+        <h1>Welcome to Pet Shop</h1>
         <p>Your one-stop shop for all your pet needs!</p>
     </div>
-    <section class="animalstopurchase">
-    <div class="animal">
-        <img src="cat1.jpeg" alt="Cute Cat 1" height="200px" width="200px" >
-        <p>A judging cat who questions your life decision.</p>
-       <a href="buy.html" target="_self">Buy Now</a>
-    </div>
-    <div class="animal">
-        <img src="cat2.jpeg" alt="Cute Cat 2" height="200px" width="200px" >
-        <p>A lazy cat who will help you to lie on the floor not being alone.</p>
-         <a href="buy.html" target="_self">Buy Now</a>
-    </div>
-    <div class="animal">
-        <img src="cat3.jpeg" alt="Cute Cat 3" height="200px" width="200px" >
-        <p>A cute shorthair who is just here to grab your attention.</p>
-           <a href="buy.html" target="_self">Buy Now</a> 
-    </div>
-    <div class="animal">
-        <img src="cat4.jpeg" alt="Cute Cat 4" height="200px" width="200px" >
-        <p>A cute short legged cat who loves to chase laser pointers. </p>
-          <a href="buy.html" target="_self">Buy Now</a>  
-    </div>
-    <div class="animal">
-        <img src="cat5.jpeg" alt="Cute Cat 5" height="200px" width="200px" >
-        <p>A fluffy cat who enjoys long naps in sunny spots.</p>
-           <a href="buy.html" target="_self">Buy Now</a> 
-    </div>
+
+    <div class="container">
+        
+        <!-- ANIMALS SECTION -->
+        <h2 class="section-title">Our Pets</h2>
+        <section class="animalstopurchase">
+            <!-- Product 1 -->
+            <div class="animal">
+                <img src="cat1.jpeg" alt="Judging Cat" data-name="Judging Cat">
+                <p>A judging cat who questions your life decisions.</p>
+                <div class="card-actions">
+                    <a href="buy.html?product=Judging%20Cat" class="btn-buy">Buy Now</a>
+                    <button class="btn-add">Add to Cart</button>
+                </div>
+            </div>
+            
+            <!-- Product 2 -->
+            <div class="animal">
+                <img src="cat2.jpeg" alt="Lazy Cat" data-name="Lazy Cat">
+                <p>A lazy cat who will help you to lie on the floor.</p>
+                <div class="card-actions">
+                    <a href="buy.html?product=Lazy%20Cat" class="btn-buy">Buy Now</a>
+                    <button class="btn-add">Add to Cart</button>
+                </div>
+            </div>
+            
+            <!-- Product 3 -->
+            <div class="animal">
+                <img src="cat3.jpeg" alt="Cute Shorthair" data-name="Cute Shorthair">
+                <p>A cute shorthair who is just here to grab your attention.</p>
+                <div class="card-actions">
+                    <a href="buy.html?product=Cute%20Shorthair" class="btn-buy">Buy Now</a>
+                    <button class="btn-add">Add to Cart</button>
+                </div>
+            </div>
+
+            <!-- Product 4 -->
+            <div class="animal">
+                <img src="cat4.jpeg" alt="Short Legged Cat" data-name="Short Legged Cat">
+                <p>A cute short legged cat who loves to chase laser pointers.</p>
+                <div class="card-actions">
+                    <a href="buy.html?product=Short%20Legged%20Cat" class="btn-buy">Buy Now</a>
+                    <button class="btn-add">Add to Cart</button>
+                </div>
+            </div>
+
+            <!-- Product 5 -->
+            <div class="animal">
+                <img src="cat5.jpeg" alt="Fluffy Cat" data-name="Fluffy Cat">
+                <p>A fluffy cat who enjoys long naps in sunny spots.</p>
+                <div class="card-actions">
+                    <a href="buy.html?product=Fluffy%20Cat" class="btn-buy">Buy Now</a>
+                    <button class="btn-add">Add to Cart</button>
+                </div>
+            </div>
    
-    <div class="animal">
-        <img src="dog1.jpeg" alt="Cute dog1 " height="200px" width="200px" >
-        <p>A friendly dog who loves to play fetch and go for walks.</p>
-          <a href="buy.html" target="_self">Buy Now</a>  
-    </div>
-    <div class="animal">
-        <img src="dog2.jpeg" alt="Cute dog2 " height="200px" width="200px" >
-        <p>A loyal and a cute dog who will be your best companion.</p>
-          <a href="buy.html" target="_self">Buy Now</a>  
-    </div>
-    <div class="animal">
-        <img src="dog3.jpeg" alt="Cute dog3 " height="200px" width="200px" >
-        <p>An energetic dog who loves to run and play outdoors.</p>
-         <a href="buy.html" target="_self">Buy Now</a>
-    </div>
-<hr></section>
-    <section class="accessories">
-      <p class="p"> Accesories for your pets:</p></div>
-   <section> <div class="accessory">
-        <img src="petfood.jpeg" alt="Dog Food" height="200px" width="200px" >
-        <p>High-quality food to keep your dog healthy and happy.</p>
-         <a href="buy.html" target="_self">Buy Now</a>
-    </div>
-    <div class="accessory">
-        <img src="catfood.jpeg" alt="Cat Food" height="200px" width="200px" >
-        <p> High-quality food to keep your cat healthy and happy.</p>
-         <a href="buy.html" target="_self">Buy Now</a>
-    </div>
-    <div class="accessory">
-        <img src="petcollar.jpeg" alt="Toys" height="200px" width="200px" >
-        <p>Durable collars to keep your pets safe and stylish.</p>
-         <a href="buy.html" target="_self">Buy Now</a>
-    </div>
-    <div class="accessory">
-        <img src="carrybag1.jpeg" alt="Treats" height="200px" width="200px" >
-        <p>Convenient and comfortable carriers for your pets with nets.</p>
-         <a href="buy.html" target="_self">Buy Now</a>
-    </div>
-    <div class="accessory">
-        <img src="carrybag2.jpeg" alt="Accessories" height="200px" width="200px" >
-        <p>Comfortable and stylish carriers for your pets with a protective shield.</p>
-         <a href="buy.html" target="_self">Buy Now</a></div>
-        <div class="accessory">
-        <img src="pettoys.jpg" alt="Accessories" height="200px" width="200px" >
-        <p>Fun toys to keep your pets entertained and active.</p>
-         <a href="buy.html" target="_self">Buy Now</a></div>
-        </section></section>
+            <!-- Product 6 -->
+            <div class="animal">
+                <img src="dog1.jpeg" alt="Friendly Dog" data-name="Friendly Dog">
+                <p>A friendly dog who loves to play fetch and go for walks.</p>
+                <div class="card-actions">
+                    <a href="buy.html?product=Friendly%20Dog" class="btn-buy">Buy Now</a>
+                    <button class="btn-add">Add to Cart</button>
+                </div>
+            </div>
+            
+            <!-- Product 7 -->
+            <div class="animal">
+                <img src="dog2.jpeg" alt="Loyal Dog" data-name="Loyal Dog">
+                <p>A loyal and cute dog who will be your best companion.</p>
+                <div class="card-actions">
+                    <a href="buy.html?product=Loyal%20Dog" class="btn-buy">Buy Now</a>
+                    <button class="btn-add">Add to Cart</button>
+                </div>
+            </div>
 
-  <script>
-const modal = document.getElementById("modal");
-const modalImg = document.getElementById("modalImg");
-const modalText = document.getElementById("modalText");
+            <!-- Product 8 -->
+            <div class="animal">
+                <img src="dog3.jpeg" alt="Energetic Dog" data-name="Energetic Dog">
+                <p>An energetic dog who loves to run and play outdoors.</p>
+                <div class="card-actions">
+                    <a href="buy.html?product=Energetic%20Dog" class="btn-buy">Buy Now</a>
+                    <button class="btn-add">Add to Cart</button>
+                </div>
+            </div>
+        </section>
 
-document.querySelectorAll(".animal img, .accessory img").forEach(img => {
-    img.addEventListener("click", () => {
-        modal.style.display = "flex";
-        modalImg.src = img.src;
-        modalText.textContent = img.nextElementSibling.textContent;
-    });
-});
+        <hr style="border: 0; border-top: 1px solid #ddd; margin: 40px 0;">
 
-function closeModal() {
-    modal.style.display = "none";
-}
+        <!-- ACCESSORIES SECTION -->
+        <h2 class="section-title">Accessories</h2>
+        <section class="accessories">
+            <div class="accessory">
+                <img src="petfood.jpeg" alt="Dog Food" data-name="Dog Food">
+                <p>High-quality food to keep your dog healthy and happy.</p>
+                <div class="card-actions">
+                    <a href="buy.html?product=Dog%20Food" class="btn-buy">Buy Now</a>
+                    <button class="btn-add">Add to Cart</button>
+                </div>
+            </div>
+            <div class="accessory">
+                <img src="catfood.jpeg" alt="Cat Food" data-name="Cat Food">
+                <p>High-quality food to keep your cat healthy and happy.</p>
+                <div class="card-actions">
+                    <a href="buy.html?product=Cat%20Food" class="btn-buy">Buy Now</a>
+                    <button class="btn-add">Add to Cart</button>
+                </div>
+            </div>
+            <div class="accessory">
+                <img src="petcollar.jpeg" alt="Collars" data-name="Pet Collar">
+                <p>Durable collars to keep your pets safe and stylish.</p>
+                <div class="card-actions">
+                    <a href="buy.html?product=Pet%20Collar" class="btn-buy">Buy Now</a>
+                    <button class="btn-add">Add to Cart</button>
+                </div>
+            </div>
+            <div class="accessory">
+                <img src="carrybag1.jpeg" alt="Net Carrier" data-name="Net Carrier">
+                <p>Convenient and comfortable carriers for your pets with nets.</p>
+                <div class="card-actions">
+                    <a href="buy.html?product=Net%20Carrier" class="btn-buy">Buy Now</a>
+                    <button class="btn-add">Add to Cart</button>
+                </div>
+            </div>
+            <div class="accessory">
+                <img src="carrybag2.jpeg" alt="Shield Carrier" data-name="Shield Carrier">
+                <p>Comfortable and stylish carriers for your pets with a protective shield.</p>
+                <div class="card-actions">
+                    <a href="buy.html?product=Shield%20Carrier" class="btn-buy">Buy Now</a>
+                    <button class="btn-add">Add to Cart</button>
+                </div>
+            </div>
+            <div class="accessory">
+                <img src="pettoys.jpg" alt="Toys" data-name="Pet Toys">
+                <p>Fun toys to keep your pets entertained and active.</p>
+                <div class="card-actions">
+                    <a href="buy.html?product=Pet%20Toys" class="btn-buy">Buy Now</a>
+                    <button class="btn-add">Add to Cart</button>
+                </div>
+            </div>
+        </section>
 
-function addToCart() {
-    alert("🐾 Added to cart successfully!");
-    closeModal();
-}
-
-window.onclick = e => {
-    if (e.target === modal) closeModal();
-};
-</script>
-<div class="modal" id="modal">
-    <div class="modal-content">
-        <span class="close" onclick="closeModal()">✖</span>
-        <img id="modalImg" width="200">
-        <p id="modalText"></p>
-        <button onclick="addToCart()">Add to Cart 🛒</button>
     </div>
-</div>
 
-    
+    <!-- MODAL POPUP -->
+    <div class="modal" id="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <img id="modalImg" width="100%" style="border-radius:10px; margin-bottom:15px;">
+            <h3 id="modalTitle" style="margin-top:0;">Product Name</h3>
+            <p id="modalText">Description goes here...</p>
+            <button class="btn-cart">Add to Cart 🛒</button>
+        </div>
+    </div>
 
-    
+    <script src="shop.js"></script>
 </body>
 </html>
