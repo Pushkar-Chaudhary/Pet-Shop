@@ -14,7 +14,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const total = price * qty;
 
         totalText.textContent = total;
-        priceField.value = "₹" + total;
+        priceField.value = "रू" + total;
     }
 
     productSelect.addEventListener("change", updatePrice);

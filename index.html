@@ -3,184 +3,285 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pet Shop</title>
+    <meta name="description" content="Your one-stop shop for pets and pet accessories. Find cats, dogs, food, toys, and more for your furry friends.">
+    <meta name="keywords" content="pet shop, cats, dogs, pet food, pet toys, pet accessories, buy pets online">
+    <meta name="author" content="Pet Shop">
+    <meta name="robots" content="index, follow">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <title>Pet Shop - Your Pet's Best Friend</title>
+
     <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <!-- Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer">
+
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
     <!-- HEADER -->
     <header>
-        <a href="index.html" class="logo">Pet Shop 🐾</a>
-        <div class="cart-btn">
-            <i class="fas fa-shopping-cart"></i>
-            <span class="cart-count" id="cartCount">0</span>
+        <div class="header-content">
+            <a href="index.html" class="logo">Pet Shop 🐾</a>
+            <div class="header-controls">
+                <div class="theme-selector">
+                    <button class="theme-btn active" data-theme="light">
+                        <i class="fas fa-sun"></i>
+                    </button>
+                    <button class="theme-btn" data-theme="dark">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                    <button class="theme-btn" data-theme="colorful">
+                        <i class="fas fa-palette"></i>
+                    </button>
+                </div>
+                <button class="cart-toggle-btn">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="cart-count" id="cartCount">0</span>
+                </button>
+            </div>
         </div>
     </header>
 
-    <!-- WELCOME -->
-    <div class="welcome">
-        <h1>Welcome to Pet Shop</h1>
-        <p>Your one-stop shop for all your pet needs!</p>
-    </div>
-
-    <div class="container">
-        
-        <!-- ANIMALS SECTION -->
-        <h2 class="section-title">Our Pets</h2>
-        <section class="animalstopurchase">
-            <!-- Product 1 -->
-            <div class="animal">
-                <img src="cat1.jpeg" alt="Judging Cat" data-name="Judging Cat">
-                <p>A judging cat who questions your life decisions.</p>
-                <div class="card-actions">
-                    <a href="buy.html?product=Judging%20Cat" class="btn-buy">Buy Now</a>
-                    <button class="btn-add">Add to Cart</button>
-                </div>
-            </div>
-            
-            <!-- Product 2 -->
-            <div class="animal">
-                <img src="cat2.jpeg" alt="Lazy Cat" data-name="Lazy Cat">
-                <p>A lazy cat who will help you to lie on the floor.</p>
-                <div class="card-actions">
-                    <a href="buy.html?product=Lazy%20Cat" class="btn-buy">Buy Now</a>
-                    <button class="btn-add">Add to Cart</button>
-                </div>
-            </div>
-            
-            <!-- Product 3 -->
-            <div class="animal">
-                <img src="cat3.jpeg" alt="Cute Shorthair" data-name="Cute Shorthair">
-                <p>A cute shorthair who is just here to grab your attention.</p>
-                <div class="card-actions">
-                    <a href="buy.html?product=Cute%20Shorthair" class="btn-buy">Buy Now</a>
-                    <button class="btn-add">Add to Cart</button>
+    <!-- MAIN LAYOUT -->
+    <div class="main-layout">
+        <!-- MAIN CONTENT -->
+        <main class="main-content">
+            <!-- WELCOME -->
+            <div class="welcome">
+                <h1>Welcome to Pet Shop</h1>
+                <p>Your one-stop shop for all your pet needs!</p>
+                <div class="welcome-stats">
+                    <div class="stat">
+                        <i class="fas fa-heart"></i>
+                        <span>100+ Happy Pets</span>
+                    </div>
+                    <div class="stat">
+                        <i class="fas fa-star"></i>
+                        <span>5-Star Reviews</span>
+                    </div>
+                    <div class="stat">
+                        <i class="fas fa-shipping-fast"></i>
+                        <span>Free Shipping</span>
+                    </div>
                 </div>
             </div>
 
-            <!-- Product 4 -->
-            <div class="animal">
-                <img src="cat4.jpeg" alt="Short Legged Cat" data-name="Short Legged Cat">
-                <p>A cute short legged cat who loves to chase laser pointers.</p>
-                <div class="card-actions">
-                    <a href="buy.html?product=Short%20Legged%20Cat" class="btn-buy">Buy Now</a>
-                    <button class="btn-add">Add to Cart</button>
+            <div class="container">
+
+                <!-- ANIMALS SECTION -->
+                <h2 class="section-title">Our Pets</h2>
+                <section class="animalstopurchase">
+                    <!-- Default products as fallback -->
+                    <div class="animal">
+                        <img src="cat1.jpeg" alt="Judging Cat" data-name="Judging Cat" onerror="this.src='placeholder.jpg'">
+                        <div class="card-content">
+                            <h3>Judging Cat</h3>
+                            <p>A judging cat who questions your life decisions.</p>
+                            <div class="price-badge">रू300.00</div>
+                            <div class="card-actions">
+                                <a href="buy.html?product=Judging%20Cat" class="btn-buy">Buy Now</a>
+                                <button class="btn-add" data-product="Judging Cat">Add to Cart</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="animal">
+                        <img src="cat2.jpeg" alt="Lazy Cat" data-name="Lazy Cat" onerror="this.src='placeholder.jpg'">
+                        <div class="card-content">
+                            <h3>Lazy Cat</h3>
+                            <p>A lazy cat who will help you to lie on the floor.</p>
+                            <div class="price-badge">रू280.00</div>
+                            <div class="card-actions">
+                                <a href="buy.html?product=Lazy%20Cat" class="btn-buy">Buy Now</a>
+                                <button class="btn-add" data-product="Lazy Cat">Add to Cart</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="animal">
+                        <img src="cat3.jpeg" alt="Cute Shorthair" data-name="Cute Shorthair" onerror="this.src='placeholder.jpg'">
+                        <div class="card-content">
+                            <h3>Cute Shorthair</h3>
+                            <p>A cute shorthair who is just here to grab your attention.</p>
+                            <div class="price-badge">रू350.00</div>
+                            <div class="card-actions">
+                                <a href="buy.html?product=Cute%20Shorthair" class="btn-buy">Buy Now</a>
+                                <button class="btn-add" data-product="Cute Shorthair">Add to Cart</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="animal">
+                        <img src="dog1.jpeg" alt="Friendly Dog" data-name="Friendly Dog" onerror="this.src='placeholder.jpg'">
+                        <div class="card-content">
+                            <h3>Friendly Dog</h3>
+                            <p>A friendly dog who loves to play fetch and go for walks.</p>
+                            <div class="price-badge">रू450.00</div>
+                            <div class="card-actions">
+                                <a href="buy.html?product=Friendly%20Dog" class="btn-buy">Buy Now</a>
+                                <button class="btn-add" data-product="Friendly Dog">Add to Cart</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="animal">
+                        <img src="dog2.jpeg" alt="Loyal Dog" data-name="Loyal Dog" onerror="this.src='placeholder.jpg'">
+                        <div class="card-content">
+                            <h3>Loyal Dog</h3>
+                            <p>A loyal and cute dog who will be your best companion.</p>
+                            <div class="price-badge">रू500.00</div>
+                            <div class="card-actions">
+                                <a href="buy.html?product=Loyal%20Dog" class="btn-buy">Buy Now</a>
+                                <button class="btn-add" data-product="Loyal Dog">Add to Cart</button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <hr class="section-divider">
+
+                <!-- ACCESSORIES SECTION -->
+                <h2 class="section-title">Accessories</h2>
+                <section class="accessories">
+                    <!-- Default products as fallback -->
+                    <div class="accessory">
+                        <img src="petfood.jpeg" alt="Dog Food" data-name="Dog Food" onerror="this.src='placeholder.jpg'">
+                        <div class="card-content">
+                            <h3>Dog Food</h3>
+                            <p>High-quality food to keep your dog healthy and happy.</p>
+                            <div class="price-badge">रू120.00</div>
+                            <div class="card-actions">
+                                <a href="buy.html?product=Dog%20Food" class="btn-buy">Buy Now</a>
+                                <button class="btn-add" data-product="Dog Food">Add to Cart</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accessory">
+                        <img src="catfood.jpeg" alt="Cat Food" data-name="Cat Food" onerror="this.src='placeholder.jpg'">
+                        <div class="card-content">
+                            <h3>Cat Food</h3>
+                            <p>High-quality food to keep your cat healthy and happy.</p>
+                            <div class="price-badge">रू110.00</div>
+                            <div class="card-actions">
+                                <a href="buy.html?product=Cat%20Food" class="btn-buy">Buy Now</a>
+                                <button class="btn-add" data-product="Cat Food">Add to Cart</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accessory">
+                        <img src="petcollar.jpeg" alt="Pet Collar" data-name="Pet Collar" onerror="this.src='placeholder.jpg'">
+                        <div class="card-content">
+                            <h3>Pet Collar</h3>
+                            <p>Durable collars to keep your pets safe and stylish.</p>
+                            <div class="price-badge">रू80.00</div>
+                            <div class="card-actions">
+                                <a href="buy.html?product=Pet%20Collar" class="btn-buy">Buy Now</a>
+                                <button class="btn-add" data-product="Pet Collar">Add to Cart</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accessory">
+                        <img src="carrybag1.jpeg" alt="Net Carrier" data-name="Net Carrier" onerror="this.src='placeholder.jpg'">
+                        <div class="card-content">
+                            <h3>Net Carrier</h3>
+                            <p>Convenient and comfortable carriers for your pets with nets.</p>
+                            <div class="price-badge">रू200.00</div>
+                            <div class="card-actions">
+                                <a href="buy.html?product=Net%20Carrier" class="btn-buy">Buy Now</a>
+                                <button class="btn-add" data-product="Net Carrier">Add to Cart</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accessory">
+                        <img src="pettoys.jpg" alt="Pet Toys" data-name="Pet Toys" onerror="this.src='placeholder.jpg'">
+                        <div class="card-content">
+                            <h3>Pet Toys</h3>
+                            <p>Fun toys to keep your pets entertained and active.</p>
+                            <div class="price-badge">रू150.00</div>
+                            <div class="card-actions">
+                                <a href="buy.html?product=Pet%20Toys" class="btn-buy">Buy Now</a>
+                                <button class="btn-add" data-product="Pet Toys">Add to Cart</button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+        </main>
+
+        <!-- RIGHT SIDEBAR CART -->
+        <aside class="cart-sidebar" id="cartSidebar">
+            <div class="cart-header">
+                <h3>Your Cart</h3>
+                <button class="cart-close-btn" id="cartCloseBtn">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <div class="cart-content">
+                <div class="cart-empty" id="cartEmpty">
+                    <i class="fas fa-shopping-cart"></i>
+                    <p>Your cart is empty</p>
+                    <span>Add some pets to get started!</span>
+                </div>
+
+                <div class="cart-items" id="cartItems" style="display: none;">
+                    <!-- Cart items will be populated here -->
                 </div>
             </div>
 
-            <!-- Product 5 -->
-            <div class="animal">
-                <img src="cat5.jpeg" alt="Fluffy Cat" data-name="Fluffy Cat">
-                <p>A fluffy cat who enjoys long naps in sunny spots.</p>
-                <div class="card-actions">
-                    <a href="buy.html?product=Fluffy%20Cat" class="btn-buy">Buy Now</a>
-                    <button class="btn-add">Add to Cart</button>
+            <div class="cart-footer" id="cartFooter" style="display: none;">
+                <div class="cart-total">
+                    <span>Total:</span>
+                    <span class="total-amount" id="cartTotal">रू0.00</span>
                 </div>
+                <button class="btn-checkout" id="checkoutBtn">
+                    <i class="fas fa-credit-card"></i>
+                    Proceed to Checkout
+                </button>
+                <a href="seller.html" class="seller-link">
+                    <i class="fas fa-store"></i>
+                    Seller Dashboard
+                </a>
             </div>
-   
-            <!-- Product 6 -->
-            <div class="animal">
-                <img src="dog1.jpeg" alt="Friendly Dog" data-name="Friendly Dog">
-                <p>A friendly dog who loves to play fetch and go for walks.</p>
-                <div class="card-actions">
-                    <a href="buy.html?product=Friendly%20Dog" class="btn-buy">Buy Now</a>
-                    <button class="btn-add">Add to Cart</button>
-                </div>
-            </div>
-            
-            <!-- Product 7 -->
-            <div class="animal">
-                <img src="dog2.jpeg" alt="Loyal Dog" data-name="Loyal Dog">
-                <p>A loyal and cute dog who will be your best companion.</p>
-                <div class="card-actions">
-                    <a href="buy.html?product=Loyal%20Dog" class="btn-buy">Buy Now</a>
-                    <button class="btn-add">Add to Cart</button>
-                </div>
-            </div>
-
-            <!-- Product 8 -->
-            <div class="animal">
-                <img src="dog3.jpeg" alt="Energetic Dog" data-name="Energetic Dog">
-                <p>An energetic dog who loves to run and play outdoors.</p>
-                <div class="card-actions">
-                    <a href="buy.html?product=Energetic%20Dog" class="btn-buy">Buy Now</a>
-                    <button class="btn-add">Add to Cart</button>
-                </div>
-            </div>
-        </section>
-
-        <hr style="border: 0; border-top: 1px solid #ddd; margin: 40px 0;">
-
-        <!-- ACCESSORIES SECTION -->
-        <h2 class="section-title">Accessories</h2>
-        <section class="accessories">
-            <div class="accessory">
-                <img src="petfood.jpeg" alt="Dog Food" data-name="Dog Food">
-                <p>High-quality food to keep your dog healthy and happy.</p>
-                <div class="card-actions">
-                    <a href="buy.html?product=Dog%20Food" class="btn-buy">Buy Now</a>
-                    <button class="btn-add">Add to Cart</button>
-                </div>
-            </div>
-            <div class="accessory">
-                <img src="catfood.jpeg" alt="Cat Food" data-name="Cat Food">
-                <p>High-quality food to keep your cat healthy and happy.</p>
-                <div class="card-actions">
-                    <a href="buy.html?product=Cat%20Food" class="btn-buy">Buy Now</a>
-                    <button class="btn-add">Add to Cart</button>
-                </div>
-            </div>
-            <div class="accessory">
-                <img src="petcollar.jpeg" alt="Collars" data-name="Pet Collar">
-                <p>Durable collars to keep your pets safe and stylish.</p>
-                <div class="card-actions">
-                    <a href="buy.html?product=Pet%20Collar" class="btn-buy">Buy Now</a>
-                    <button class="btn-add">Add to Cart</button>
-                </div>
-            </div>
-            <div class="accessory">
-                <img src="carrybag1.jpeg" alt="Net Carrier" data-name="Net Carrier">
-                <p>Convenient and comfortable carriers for your pets with nets.</p>
-                <div class="card-actions">
-                    <a href="buy.html?product=Net%20Carrier" class="btn-buy">Buy Now</a>
-                    <button class="btn-add">Add to Cart</button>
-                </div>
-            </div>
-            <div class="accessory">
-                <img src="carrybag2.jpeg" alt="Shield Carrier" data-name="Shield Carrier">
-                <p>Comfortable and stylish carriers for your pets with a protective shield.</p>
-                <div class="card-actions">
-                    <a href="buy.html?product=Shield%20Carrier" class="btn-buy">Buy Now</a>
-                    <button class="btn-add">Add to Cart</button>
-                </div>
-            </div>
-            <div class="accessory">
-                <img src="pettoys.jpg" alt="Toys" data-name="Pet Toys">
-                <p>Fun toys to keep your pets entertained and active.</p>
-                <div class="card-actions">
-                    <a href="buy.html?product=Pet%20Toys" class="btn-buy">Buy Now</a>
-                    <button class="btn-add">Add to Cart</button>
-                </div>
-            </div>
-        </section>
-
+        </aside>
     </div>
 
     <!-- MODAL POPUP -->
     <div class="modal" id="modal">
         <div class="modal-content">
             <span class="close-btn">&times;</span>
-            <img id="modalImg" width="100%" style="border-radius:10px; margin-bottom:15px;">
-            <h3 id="modalTitle" style="margin-top:0;">Product Name</h3>
-            <p id="modalText">Description goes here...</p>
-            <button class="btn-cart">Add to Cart 🛒</button>
+            <div class="modal-image-container">
+                <img id="modalImg" alt="Product Image">
+                <div class="modal-badges">
+                    <span class="badge" id="modalCategory">Pet</span>
+                    <span class="badge price-badge" id="modalPrice">रू0</span>
+                </div>
+            </div>
+            <div class="modal-body">
+                <h3 id="modalTitle">Product Name</h3>
+                <p id="modalText">Description goes here...</p>
+                <div class="modal-actions">
+                    <button class="btn-add-to-cart" id="modalAddToCart">
+                        <i class="fas fa-cart-plus"></i>
+                        Add to Cart
+                    </button>
+                    <button class="btn-buy-now" id="modalBuyNow">
+                        <i class="fas fa-bolt"></i>
+                        Buy Now
+                    </button>
+                </div>
+            </div>
         </div>
     </div>
+
+    <!-- LOADING OVERLAY -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-spinner">
+            <i class="fas fa-paw"></i>
+            <span>Loading...</span>
+        </div>
+    </div>
+
+    <!-- NOTIFICATION TOAST -->
+    <div class="toast-container" id="toastContainer"></div>
 
     <script src="shop.js"></script>
 </body>
