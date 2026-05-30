@@ -207,16 +207,14 @@
         }
 
         .logout-btn {
-            position: absolute;
-            top: 20px;
-            right: 20px;
             background: #dc3545;
             color: white;
             border: none;
-            padding: 10px 20px;
+            padding: 0.55rem 1rem;
             border-radius: 8px;
             cursor: pointer;
             font-size: 14px;
+            min-height: 44px;
         }
 
         .logout-btn:hover {
@@ -296,6 +294,27 @@
             .seller-header h1 {
                 font-size: 2rem;
             }
+
+            .product-item {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .product-actions {
+                width: 100%;
+                flex-wrap: wrap;
+            }
+
+            .product-actions button {
+                flex: 1 1 calc(50% - 5px);
+                min-height: 44px;
+            }
+
+            .login-form {
+                margin: 2rem auto;
+                padding: 1.5rem;
+                width: calc(100% - 2rem);
+            }
         }
     </style>
 </head>
@@ -303,13 +322,19 @@
 
     <!-- HEADER -->
     <header>
-        <a href="index.html" class="logo">Pet Shop 🐾</a>
-        <button class="logout-btn" id="logoutBtn">Logout</button>
+        <div class="header-content" id="sellerHeaderBar" style="display: none;">
+            <a href="index.html" class="logo">Pet Shop 🐾</a>
+            <div class="header-controls">
+                <a href="index.html" class="link-btn">View Shop</a>
+                <button type="button" class="logout-btn" id="logoutBtn" style="display: none;">Logout</button>
+            </div>
+        </div>
     </header>
 
     <!-- LOGIN FORM (shown when not logged in) -->
     <div class="login-form" id="loginForm">
         <h2>Seller Login</h2>
+        <p class="subtle" style="text-align:center; margin-bottom:1rem;">Demo: admin / petshop2024</p>
         <form id="loginFormEl">
             <div class="form-group">
                 <label for="username">Username</label>
@@ -327,8 +352,10 @@
     <div class="seller-dashboard" id="dashboard" style="display: none;">
         <div class="seller-header">
             <h1>Seller Dashboard</h1>
-            <p>Manage your products and grow your business</p>
+            <p>Manage products, prices, and customer orders</p>
         </div>
+
+        <p id="statusMessage" class="auth-message"></p>
 
         <div class="stats">
             <div class="stat-card">
@@ -342,6 +369,10 @@
             <div class="stat-card">
                 <h3>Accessories</h3>
                 <div class="number" id="totalAccessories">0</div>
+            </div>
+            <div class="stat-card">
+                <h3>Orders</h3>
+                <div class="number" id="totalOrders">0</div>
             </div>
         </div>
 
@@ -372,19 +403,24 @@
                     </div>
 
                     <div class="form-group">
+                        <label for="productSubcategory">Subcategory *</label>
+                        <select id="productSubcategory" required>
+                            <option value="cat">Cat</option>
+                            <option value="dog">Dog</option>
+                            <option value="food">Food</option>
+                            <option value="gear">Gear / Accessory</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
                         <label for="productDescription">Description *</label>
                         <textarea id="productDescription" required></textarea>
                     </div>
 
                     <div class="form-group">
-                        <label for="productImage">Product Image</label>
-                        <div class="image-upload">
-                            <input type="file" id="productImage" accept="image/*">
-                            <label for="productImage">
-                                <i class="fas fa-cloud-upload-alt"></i>
-                                <span>Click to upload image</span>
-                            </label>
-                        </div>
+                        <label for="productImageUrl">Image File or URL</label>
+                        <input type="text" id="productImageUrl" placeholder="cat1.jpeg or https://example.com/cat.jpg">
+                        <small style="color:#666;">Use a file name from the shop folder or paste an image URL.</small>
                         <img id="imagePreview" class="image-preview" style="display: none;" alt="Preview">
                     </div>
 
@@ -402,8 +438,17 @@
                 </div>
             </div>
         </div>
+
+        <div class="product-list orders-panel">
+            <h3><i class="fas fa-receipt"></i> Customer Orders</h3>
+            <div id="orderList">
+                <p class="subtle">No orders yet.</p>
+            </div>
+        </div>
     </div>
 
+    <script src="auth.js"></script>
+    <script src="products.js"></script>
     <script src="seller.js"></script>
 </body>
 </html>

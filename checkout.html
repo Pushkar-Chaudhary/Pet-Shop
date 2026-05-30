@@ -21,20 +21,23 @@
 
     <!-- HEADER -->
     <header>
-        <a href="index.html" class="logo">Pet Shop 🐾</a>
-        <div class="cart-btn">
-            <i class="fas fa-shopping-cart"></i>
-            <span class="cart-count" id="cartCount">0</span>
+        <div class="header-content">
+            <a href="index.html" class="logo">Pet Shop 🐾</a>
+            <div class="header-controls">
+                <a href="index.html" class="link-btn">Continue Shopping</a>
+                <button type="button" class="link-btn link-btn-muted" id="logoutBtn">Logout</button>
+            </div>
         </div>
     </header>
 
-    <div class="container">
+    <div class="container checkout-page">
         <h1 class="section-title">Checkout</h1>
+        <p id="customerStatus" class="checkout-customer-status subtle"></p>
 
         <div class="checkout-container">
-            <!-- CART ITEMS -->
+            <!-- CART / BUY NOW ITEMS -->
             <div class="checkout-section">
-                <h2>Your Cart</h2>
+                <h2 id="cartSectionTitle">Your Order</h2>
                 <div id="cartItems" class="cart-items">
                     <!-- Cart items will be populated here -->
                 </div>
@@ -191,7 +194,8 @@
     <!-- EmailJS Library -->
     <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
 
-    <!-- LINK TO JS -->
+    <script src="auth.js"></script>
+    <script src="products.js"></script>
     <script src="checkout.js"></script>
 
 </body>

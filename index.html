@@ -23,6 +23,16 @@
     <header>
         <div class="header-content">
             <a href="index.html" class="logo">Pet Shop 🐾</a>
+            <button class="menu-toggle" id="menuToggle" aria-label="Open menu">
+                <i class="fas fa-bars"></i>
+            </button>
+            <nav class="nav-links" id="navLinks">
+                <a href="cats.html">Cats</a>
+                <a href="dogs.html">Dogs</a>
+                <a href="pet-food.html">Pet Food</a>
+                <a href="accessories.html">Accessories</a>
+                <a href="index.html#bestsellers">Best Sellers</a>
+            </nav>
             <div class="header-controls">
                 <div class="theme-selector">
                     <button class="theme-btn active" data-theme="light">
@@ -35,7 +45,14 @@
                         <i class="fas fa-palette"></i>
                     </button>
                 </div>
-                <button class="cart-toggle-btn">
+                <a href="login.html?next=checkout.html" class="link-btn" id="authLoginLink">Login / Sign Up</a>
+                <div class="auth-user-menu" id="authUserMenu" style="display: none;">
+                    <span class="auth-user-name" id="authUserName"></span>
+                    <a href="checkout.html" class="link-btn">Checkout</a>
+                    <button type="button" class="link-btn link-btn-muted" id="authLogoutBtn">Logout</button>
+                </div>
+                <a href="seller.html" class="link-btn link-btn-muted" id="authSellerLink" style="display: none;">Seller Dashboard</a>
+                <button class="cart-toggle-btn" type="button" aria-label="Open cart">
                     <i class="fas fa-shopping-cart"></i>
                     <span class="cart-count" id="cartCount">0</span>
                 </button>
@@ -67,9 +84,13 @@
                 </div>
             </div>
 
+            <section id="bestsellers" class="container" style="padding-top: 0.5rem;">
+                <h2 class="section-title">Best Sellers</h2>
+                <p class="subtle" style="text-align:center; max-width:700px; margin:-0.5rem auto 1rem;">Our customer favorites are the playful pets and everyday essentials everyone keeps coming back for.</p>
+            </section>
+
             <div class="container">
 
-                <!-- ANIMALS SECTION -->
                 <h2 class="section-title">Our Pets</h2>
                 <section class="animalstopurchase">
                     <!-- Default products as fallback -->
@@ -80,7 +101,7 @@
                             <p>A judging cat who questions your life decisions.</p>
                             <div class="price-badge">रू300.00</div>
                             <div class="card-actions">
-                                <a href="buy.html?product=Judging%20Cat" class="btn-buy">Buy Now</a>
+                                <a href="checkout.html?product=Judging%20Cat&amp;buyNow=1" class="btn-buy">Buy Now</a>
                                 <button class="btn-add" data-product="Judging Cat">Add to Cart</button>
                             </div>
                         </div>
@@ -92,7 +113,7 @@
                             <p>A lazy cat who will help you to lie on the floor.</p>
                             <div class="price-badge">रू280.00</div>
                             <div class="card-actions">
-                                <a href="buy.html?product=Lazy%20Cat" class="btn-buy">Buy Now</a>
+                                <a href="checkout.html?product=Lazy%20Cat&amp;buyNow=1" class="btn-buy">Buy Now</a>
                                 <button class="btn-add" data-product="Lazy Cat">Add to Cart</button>
                             </div>
                         </div>
@@ -104,7 +125,7 @@
                             <p>A cute shorthair who is just here to grab your attention.</p>
                             <div class="price-badge">रू350.00</div>
                             <div class="card-actions">
-                                <a href="buy.html?product=Cute%20Shorthair" class="btn-buy">Buy Now</a>
+                                <a href="checkout.html?product=Cute%20Shorthair&amp;buyNow=1" class="btn-buy">Buy Now</a>
                                 <button class="btn-add" data-product="Cute Shorthair">Add to Cart</button>
                             </div>
                         </div>
@@ -116,7 +137,7 @@
                             <p>A friendly dog who loves to play fetch and go for walks.</p>
                             <div class="price-badge">रू450.00</div>
                             <div class="card-actions">
-                                <a href="buy.html?product=Friendly%20Dog" class="btn-buy">Buy Now</a>
+                                <a href="checkout.html?product=Friendly%20Dog&amp;buyNow=1" class="btn-buy">Buy Now</a>
                                 <button class="btn-add" data-product="Friendly Dog">Add to Cart</button>
                             </div>
                         </div>
@@ -128,7 +149,7 @@
                             <p>A loyal and cute dog who will be your best companion.</p>
                             <div class="price-badge">रू500.00</div>
                             <div class="card-actions">
-                                <a href="buy.html?product=Loyal%20Dog" class="btn-buy">Buy Now</a>
+                                <a href="checkout.html?product=Loyal%20Dog&amp;buyNow=1" class="btn-buy">Buy Now</a>
                                 <button class="btn-add" data-product="Loyal Dog">Add to Cart</button>
                             </div>
                         </div>
@@ -148,7 +169,7 @@
                             <p>High-quality food to keep your dog healthy and happy.</p>
                             <div class="price-badge">रू120.00</div>
                             <div class="card-actions">
-                                <a href="buy.html?product=Dog%20Food" class="btn-buy">Buy Now</a>
+                                <a href="checkout.html?product=Dog%20Food&amp;buyNow=1" class="btn-buy">Buy Now</a>
                                 <button class="btn-add" data-product="Dog Food">Add to Cart</button>
                             </div>
                         </div>
@@ -160,7 +181,7 @@
                             <p>High-quality food to keep your cat healthy and happy.</p>
                             <div class="price-badge">रू110.00</div>
                             <div class="card-actions">
-                                <a href="buy.html?product=Cat%20Food" class="btn-buy">Buy Now</a>
+                                <a href="checkout.html?product=Cat%20Food&amp;buyNow=1" class="btn-buy">Buy Now</a>
                                 <button class="btn-add" data-product="Cat Food">Add to Cart</button>
                             </div>
                         </div>
@@ -172,7 +193,7 @@
                             <p>Durable collars to keep your pets safe and stylish.</p>
                             <div class="price-badge">रू80.00</div>
                             <div class="card-actions">
-                                <a href="buy.html?product=Pet%20Collar" class="btn-buy">Buy Now</a>
+                                <a href="checkout.html?product=Pet%20Collar&amp;buyNow=1" class="btn-buy">Buy Now</a>
                                 <button class="btn-add" data-product="Pet Collar">Add to Cart</button>
                             </div>
                         </div>
@@ -184,7 +205,7 @@
                             <p>Convenient and comfortable carriers for your pets with nets.</p>
                             <div class="price-badge">रू200.00</div>
                             <div class="card-actions">
-                                <a href="buy.html?product=Net%20Carrier" class="btn-buy">Buy Now</a>
+                                <a href="checkout.html?product=Net%20Carrier&amp;buyNow=1" class="btn-buy">Buy Now</a>
                                 <button class="btn-add" data-product="Net Carrier">Add to Cart</button>
                             </div>
                         </div>
@@ -196,7 +217,7 @@
                             <p>Fun toys to keep your pets entertained and active.</p>
                             <div class="price-badge">रू150.00</div>
                             <div class="card-actions">
-                                <a href="buy.html?product=Pet%20Toys" class="btn-buy">Buy Now</a>
+                                <a href="checkout.html?product=Pet%20Toys&amp;buyNow=1" class="btn-buy">Buy Now</a>
                                 <button class="btn-add" data-product="Pet Toys">Add to Cart</button>
                             </div>
                         </div>
@@ -236,9 +257,9 @@
                     <i class="fas fa-credit-card"></i>
                     Proceed to Checkout
                 </button>
-                <a href="seller.html" class="seller-link">
-                    <i class="fas fa-store"></i>
-                    Seller Dashboard
+                <a href="login.html?next=checkout.html" class="seller-link">
+                    <i class="fas fa-user"></i>
+                    Login to Checkout
                 </a>
             </div>
         </aside>
@@ -283,6 +304,8 @@
     <!-- NOTIFICATION TOAST -->
     <div class="toast-container" id="toastContainer"></div>
 
+    <script src="auth.js"></script>
+    <script src="products.js"></script>
     <script src="shop.js"></script>
 </body>
 </html>

@@ -1,411 +1,322 @@
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener('DOMContentLoaded', () => {
+  const loginForm = document.getElementById('loginForm');
+  const dashboard = document.getElementById('dashboard');
+  const loginFormEl = document.getElementById('loginFormEl');
+  const logoutBtn = document.getElementById('logoutBtn');
+  const productForm = document.getElementById('productForm');
+  const productList = document.getElementById('productList');
+  const orderList = document.getElementById('orderList');
+  const imagePreview = document.getElementById('imagePreview');
+  const sellerHeaderBar = document.getElementById('sellerHeaderBar');
+  const statusMessage = document.getElementById('statusMessage');
 
-    // --- CONFIGURATION ---
-    const SELLER_CREDENTIALS = {
-        username: "admin",
-        password: "petshop2024"
+  const totalProductsEl = document.getElementById('totalProducts');
+  const totalPetsEl = document.getElementById('totalPets');
+  const totalAccessoriesEl = document.getElementById('totalAccessories');
+  const totalOrdersEl = document.getElementById('totalOrders');
+
+  let products = [];
+  let orders = [];
+  let editingProductId = null;
+
+  const showStatus = (message, type = 'success') => {
+    if (!statusMessage) return;
+    statusMessage.textContent = message;
+    statusMessage.className = `auth-message ${type}`;
+    setTimeout(() => {
+      statusMessage.textContent = '';
+      statusMessage.className = 'auth-message';
+    }, 3500);
+  };
+
+  const getToken = () => PetShopAuth.getSession()?.token || '';
+
+  const showLogin = () => {
+    loginForm.style.display = 'block';
+    dashboard.style.display = 'none';
+    if (sellerHeaderBar) sellerHeaderBar.style.display = 'none';
+    if (logoutBtn) logoutBtn.style.display = 'none';
+  };
+
+  const showDashboard = () => {
+    loginForm.style.display = 'none';
+    dashboard.style.display = 'block';
+    if (sellerHeaderBar) sellerHeaderBar.style.display = 'flex';
+    if (logoutBtn) logoutBtn.style.display = 'inline-flex';
+    loadProducts();
+    loadOrders();
+  };
+
+  const checkAuth = async () => {
+    const session = await PetShopAuth.refreshSession();
+    if (session?.user?.role === 'seller') {
+      showDashboard();
+      return true;
+    }
+    showLogin();
+    return false;
+  };
+
+  const login = async (username, password) => {
+    try {
+      const response = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password })
+      });
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.error || 'Invalid username or password');
+      if (data.user.role !== 'seller') throw new Error('Seller account required');
+
+      PetShopAuth.saveSession(data.user, data.token);
+      showDashboard();
+      showStatus('Welcome back, ' + data.user.name + '!');
+      return true;
+    } catch (error) {
+      showStatus(error.message || 'Invalid username or password', 'error');
+      return false;
+    }
+  };
+
+  const logout = async () => {
+    await PetShopAuth.logout();
+    showLogin();
+    showStatus('Logged out successfully.');
+  };
+
+  const loadProducts = async () => {
+    try {
+      products = await PetShopProducts.fetchProducts(true);
+      displayProducts();
+      updateStats();
+    } catch (error) {
+      showStatus('Failed to load products: ' + error.message, 'error');
+      products = PetShopProducts.getCachedProducts();
+      displayProducts();
+      updateStats();
+    }
+  };
+
+  const loadOrders = async () => {
+    try {
+      const response = await fetch('/api/orders', {
+        headers: { Authorization: getToken() }
+      });
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.error || 'Failed to load orders');
+      orders = Array.isArray(data) ? data : [];
+      displayOrders();
+      if (totalOrdersEl) totalOrdersEl.textContent = orders.length;
+    } catch (error) {
+      showStatus('Failed to load orders: ' + error.message, 'error');
+      orders = [];
+      displayOrders();
+    }
+  };
+
+  const saveProducts = async () => {
+    const response = await fetch('/api/products', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: getToken()
+      },
+      body: JSON.stringify(products)
+    });
+    const data = await response.json();
+    if (!response.ok) throw new Error(data.error || 'Failed to save products');
+    localStorage.setItem('petShopProducts', JSON.stringify(products));
+    PetShopProducts.syncPriceMap(products);
+    return data;
+  };
+
+  const displayProducts = () => {
+    if (products.length === 0) {
+      productList.innerHTML = '<p class="subtle">No products yet. Add your first product using the form.</p>';
+      return;
+    }
+
+    productList.innerHTML = products.map((product) => `
+      <div class="product-item" data-id="${product.id}">
+        <img src="${product.image}" alt="${product.name}" class="product-image" onerror="this.src='placeholder.jpg'">
+        <div class="product-info">
+          <h4>${product.name}</h4>
+          <p>${product.description}</p>
+          <div class="product-price">रू${product.price}</div>
+          <small class="subtle">${product.category} · ${product.subcategory || 'general'}</small>
+        </div>
+        <div class="product-actions">
+          <button type="button" class="btn-edit" data-id="${product.id}"><i class="fas fa-edit"></i> Edit</button>
+          <button type="button" class="btn-delete" data-id="${product.id}"><i class="fas fa-trash"></i> Delete</button>
+        </div>
+      </div>
+    `).join('');
+  };
+
+  const displayOrders = () => {
+    if (!orderList) return;
+
+    if (orders.length === 0) {
+      orderList.innerHTML = '<p class="subtle">No orders yet. Customer orders will appear here.</p>';
+      return;
+    }
+
+    orderList.innerHTML = orders.map((order) => {
+      const customer = order.customer || {};
+      const total = order.totals?.total ?? order.total ?? 0;
+      const items = (order.items || []).map((item) => `${item.name} × ${item.quantity}`).join(', ');
+      const status = order.status || 'pending';
+
+      return `
+        <div class="order-item" data-id="${order.id}">
+          <div class="order-item-main">
+            <strong>${order.id}</strong>
+            <span class="order-status status-${status}">${status}</span>
+            <p>${customer.name || 'Customer'} · ${customer.phone || ''}</p>
+            <p class="subtle">${items || 'No items listed'}</p>
+            <p><strong>रू${total}</strong> · ${new Date(order.createdAt || order.orderDate).toLocaleString()}</p>
+          </div>
+          <div class="order-item-actions">
+            <select class="order-status-select" data-id="${order.id}">
+              <option value="pending" ${status === 'pending' ? 'selected' : ''}>Pending</option>
+              <option value="confirmed" ${status === 'confirmed' ? 'selected' : ''}>Confirmed</option>
+              <option value="shipped" ${status === 'shipped' ? 'selected' : ''}>Shipped</option>
+              <option value="delivered" ${status === 'delivered' ? 'selected' : ''}>Delivered</option>
+              <option value="cancelled" ${status === 'cancelled' ? 'selected' : ''}>Cancelled</option>
+            </select>
+          </div>
+        </div>
+      `;
+    }).join('');
+  };
+
+  const updateStats = () => {
+    totalProductsEl.textContent = products.length;
+    totalPetsEl.textContent = products.filter((product) => product.category === 'pet').length;
+    totalAccessoriesEl.textContent = products.filter((product) => product.category === 'accessory').length;
+  };
+
+  const resetForm = () => {
+    productForm.reset();
+    editingProductId = null;
+    document.getElementById('productId').value = '';
+    document.getElementById('submitBtn').innerHTML = '<i class="fas fa-plus"></i> Add Product';
+    imagePreview.style.display = 'none';
+    imagePreview.src = '';
+  };
+
+  const populateForm = (product) => {
+    document.getElementById('productId').value = product.id;
+    document.getElementById('productName').value = product.name;
+    document.getElementById('productPrice').value = product.price;
+    document.getElementById('productCategory').value = product.category;
+    document.getElementById('productSubcategory').value = product.subcategory || 'gear';
+    document.getElementById('productDescription').value = product.description;
+    document.getElementById('productImageUrl').value = product.image || '';
+    imagePreview.src = product.image || '';
+    imagePreview.style.display = product.image ? 'block' : 'none';
+    editingProductId = product.id;
+    document.getElementById('submitBtn').innerHTML = '<i class="fas fa-save"></i> Update Product';
+  };
+
+  loginFormEl.addEventListener('submit', (event) => {
+    event.preventDefault();
+    login(document.getElementById('username').value.trim(), document.getElementById('password').value);
+  });
+
+  logoutBtn.addEventListener('click', logout);
+
+  productForm.addEventListener('submit', async (event) => {
+    event.preventDefault();
+
+    const productData = {
+      name: document.getElementById('productName').value.trim(),
+      price: parseFloat(document.getElementById('productPrice').value),
+      category: document.getElementById('productCategory').value,
+      subcategory: document.getElementById('productSubcategory').value,
+      description: document.getElementById('productDescription').value.trim(),
+      image: document.getElementById('productImageUrl').value.trim() || imagePreview.src || 'placeholder.jpg'
     };
 
-    // --- ERROR HANDLING & LOGGING ---
-    const showError = (message) => {
-        console.error('Seller Dashboard Error:', message);
-        alert('Error: ' + message);
-    };
+    if (!productData.name || !productData.price || !productData.category || !productData.description) {
+      showStatus('Please fill in all required fields', 'error');
+      return;
+    }
 
-    const showSuccess = (message) => {
-        console.log('Seller Dashboard Success:', message);
-        alert('Success: ' + message);
-    };
+    try {
+      if (editingProductId) {
+        const index = products.findIndex((product) => product.id === editingProductId);
+        if (index !== -1) products[index] = { ...products[index], ...productData };
+        showStatus('Product updated successfully!');
+      } else {
+        products.push({ id: 'product-' + Date.now(), ...productData });
+        showStatus('Product added successfully!');
+      }
 
-    // --- ELEMENTS ---
-    const loginForm = document.getElementById("loginForm");
-    const dashboard = document.getElementById("dashboard");
-    const loginFormEl = document.getElementById("loginFormEl");
-    const logoutBtn = document.getElementById("logoutBtn");
-    const productForm = document.getElementById("productForm");
-    const productList = document.getElementById("productList");
-    const imagePreview = document.getElementById("imagePreview");
+      await saveProducts();
+      displayProducts();
+      updateStats();
+      resetForm();
+    } catch (error) {
+      showStatus(error.message, 'error');
+    }
+  });
 
-    // Stats elements
-    const totalProductsEl = document.getElementById("totalProducts");
-    const totalPetsEl = document.getElementById("totalPets");
-    const totalAccessoriesEl = document.getElementById("totalAccessories");
+  document.getElementById('productImageUrl').addEventListener('input', (event) => {
+    const value = event.target.value.trim();
+    if (value) {
+      imagePreview.src = value;
+      imagePreview.style.display = 'block';
+    } else {
+      imagePreview.style.display = 'none';
+    }
+  });
 
-    // --- AUTHENTICATION ---
-    const checkAuth = () => {
-        const isLoggedIn = localStorage.getItem("sellerLoggedIn") === "true";
-        if (isLoggedIn) {
-            showDashboard();
-        } else {
-            showLogin();
-        }
-        return isLoggedIn;
-    };
+  productList.addEventListener('click', async (event) => {
+    const editBtn = event.target.closest('.btn-edit');
+    const deleteBtn = event.target.closest('.btn-delete');
+    const productId = event.target.closest('.product-item')?.dataset.id;
+    if (!productId) return;
 
-    const showLogin = () => {
-        loginForm.style.display = "block";
-        dashboard.style.display = "none";
-    };
+    if (editBtn) {
+      const product = products.find((item) => item.id === productId);
+      if (product) populateForm(product);
+    }
 
-    const showDashboard = () => {
-        loginForm.style.display = "none";
-        dashboard.style.display = "block";
-        loadProducts();
-        updateStats();
-    };
-
-    const login = (username, password) => {
-        if (username === SELLER_CREDENTIALS.username && password === SELLER_CREDENTIALS.password) {
-            localStorage.setItem("sellerLoggedIn", "true");
-            showDashboard();
-            showSuccess("Logged in successfully!");
-            return true;
-        } else {
-            showError("Invalid username or password");
-            return false;
-        }
-    };
-
-    const logout = () => {
-        localStorage.removeItem("sellerLoggedIn");
-        showLogin();
-        showSuccess("Logged out successfully!");
-    };
-
-    // --- PRODUCT MANAGEMENT ---
-    let products = [];
-    let editingProductId = null;
-
-    const loadProducts = () => {
-        try {
-            const storedProducts = localStorage.getItem("petShopProducts");
-            products = storedProducts ? JSON.parse(storedProducts) : getDefaultProducts();
-            displayProducts();
-            updateStats();
-            syncToShop();
-        } catch (error) {
-            showError('Failed to load products: ' + error.message);
-            products = getDefaultProducts();
-        }
-    };
-
-    const getDefaultProducts = () => {
-        return [
-            {
-                id: 'judging-cat',
-                name: 'Judging Cat',
-                price: 300,
-                category: 'pet',
-                description: 'A judging cat who questions your life decisions.',
-                image: 'cat1.jpeg'
-            },
-            {
-                id: 'lazy-cat',
-                name: 'Lazy Cat',
-                price: 280,
-                category: 'pet',
-                description: 'A lazy cat who will help you to lie on the floor.',
-                image: 'cat2.jpeg'
-            },
-            {
-                id: 'cute-shorthair',
-                name: 'Cute Shorthair',
-                price: 350,
-                category: 'pet',
-                description: 'A cute shorthair who is just here to grab your attention.',
-                image: 'cat3.jpeg'
-            },
-            {
-                id: 'short-legged-cat',
-                name: 'Short Legged Cat',
-                price: 400,
-                category: 'pet',
-                description: 'A cute short legged cat who loves to chase laser pointers.',
-                image: 'cat4.jpeg'
-            },
-            {
-                id: 'fluffy-cat',
-                name: 'Fluffy Cat',
-                price: 320,
-                category: 'pet',
-                description: 'A fluffy cat who enjoys long naps in sunny spots.',
-                image: 'cat5.jpeg'
-            },
-            {
-                id: 'friendly-dog',
-                name: 'Friendly Dog',
-                price: 450,
-                category: 'pet',
-                description: 'A friendly dog who loves to play fetch and go for walks.',
-                image: 'dog1.jpeg'
-            },
-            {
-                id: 'loyal-dog',
-                name: 'Loyal Dog',
-                price: 500,
-                category: 'pet',
-                description: 'A loyal and cute dog who will be your best companion.',
-                image: 'dog2.jpeg'
-            },
-            {
-                id: 'energetic-dog',
-                name: 'Energetic Dog',
-                price: 480,
-                category: 'pet',
-                description: 'An energetic dog who loves to run and play outdoors.',
-                image: 'dog3.jpeg'
-            },
-            {
-                id: 'dog-food',
-                name: 'Dog Food',
-                price: 120,
-                category: 'accessory',
-                description: 'High-quality food to keep your dog healthy and happy.',
-                image: 'petfood.jpeg'
-            },
-            {
-                id: 'cat-food',
-                name: 'Cat Food',
-                price: 110,
-                category: 'accessory',
-                description: 'High-quality food to keep your cat healthy and happy.',
-                image: 'catfood.jpeg'
-            },
-            {
-                id: 'pet-collar',
-                name: 'Pet Collar',
-                price: 80,
-                category: 'accessory',
-                description: 'Durable collars to keep your pets safe and stylish.',
-                image: 'petcollar.jpeg'
-            },
-            {
-                id: 'net-carrier',
-                name: 'Net Carrier',
-                price: 200,
-                category: 'accessory',
-                description: 'Convenient and comfortable carriers for your pets with nets.',
-                image: 'carrybag1.jpeg'
-            },
-            {
-                id: 'shield-carrier',
-                name: 'Shield Carrier',
-                price: 250,
-                category: 'accessory',
-                description: 'Comfortable and stylish carriers for your pets with a protective shield.',
-                image: 'carrybag2.jpeg'
-            },
-            {
-                id: 'pet-toys',
-                name: 'Pet Toys',
-                price: 150,
-                category: 'accessory',
-                description: 'Fun toys to keep your pets entertained and active.',
-                image: 'pettoys.jpg'
-            }
-        ];
-    };
-
-    const saveProducts = () => {
-        try {
-            localStorage.setItem("petShopProducts", JSON.stringify(products));
-            syncToShop();
-            showSuccess('Products saved successfully!');
-        } catch (error) {
-            showError('Failed to save products: ' + error.message);
-        }
-    };
-
-    const syncToShop = () => {
-        // Create product prices object for checkout
-        const productPrices = {};
-        products.forEach(product => {
-            productPrices[product.name] = product.price;
-        });
-        localStorage.setItem("petShopProductPrices", JSON.stringify(productPrices));
-    };
-
-    const displayProducts = () => {
-        if (products.length === 0) {
-            productList.innerHTML = "<p>No products added yet. Add your first product!</p>";
-            return;
-        }
-
-        productList.innerHTML = products.map(product => `
-            <div class="product-item" data-id="${product.id}">
-                <img src="${product.image}" alt="${product.name}" class="product-image" onerror="this.src='placeholder.jpg'">
-                <div class="product-info">
-                    <h4>${product.name}</h4>
-                    <p>${product.description}</p>
-                    <div class="product-price">रू${product.price}</div>
-                    <small style="color: #666;">Category: ${product.category}</small>
-                </div>
-                <div class="product-actions">
-                    <button class="btn-edit" data-id="${product.id}">
-                        <i class="fas fa-edit"></i> Edit
-                    </button>
-                    <button class="btn-delete" data-id="${product.id}">
-                        <i class="fas fa-trash"></i> Delete
-                    </button>
-                </div>
-            </div>
-        `).join('');
-    };
-
-    const updateStats = () => {
-        const totalProducts = products.length;
-        const totalPets = products.filter(p => p.category === 'pet').length;
-        const totalAccessories = products.filter(p => p.category === 'accessory').length;
-
-        totalProductsEl.textContent = totalProducts;
-        totalPetsEl.textContent = totalPets;
-        totalAccessoriesEl.textContent = totalAccessories;
-    };
-
-    const addProduct = (productData) => {
-        const newProduct = {
-            id: Date.now().toString(),
-            ...productData
-        };
-        products.push(newProduct);
-        saveProducts();
+    if (deleteBtn && confirm('Delete this product?')) {
+      products = products.filter((item) => item.id !== productId);
+      try {
+        await saveProducts();
         displayProducts();
         updateStats();
-        return newProduct;
-    };
+        showStatus('Product deleted.');
+      } catch (error) {
+        showStatus(error.message, 'error');
+      }
+    }
+  });
 
-    const updateProduct = (id, productData) => {
-        const index = products.findIndex(p => p.id === id);
-        if (index !== -1) {
-            products[index] = { ...products[index], ...productData };
-            saveProducts();
-            displayProducts();
-            updateStats();
-            return true;
-        }
-        return false;
-    };
+  orderList?.addEventListener('change', async (event) => {
+    const select = event.target.closest('.order-status-select');
+    if (!select) return;
 
-    const deleteProduct = (id) => {
-        const index = products.findIndex(p => p.id === id);
-        if (index !== -1) {
-            const productName = products[index].name;
-            products.splice(index, 1);
-            saveProducts();
-            displayProducts();
-            updateStats();
-            showSuccess(`Product "${productName}" deleted successfully!`);
-            return true;
-        }
-        return false;
-    };
+    try {
+      const response = await fetch('/api/orders/' + select.dataset.id, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: getToken()
+        },
+        body: JSON.stringify({ status: select.value })
+      });
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.error || 'Failed to update order');
+      await loadOrders();
+      showStatus('Order status updated.');
+    } catch (error) {
+      showStatus(error.message, 'error');
+    }
+  });
 
-    const getProduct = (id) => {
-        return products.find(p => p.id === id);
-    };
-
-    // --- FORM HANDLING ---
-    const resetForm = () => {
-        productForm.reset();
-        editingProductId = null;
-        document.getElementById("productId").value = "";
-        document.getElementById("submitBtn").innerHTML = '<i class="fas fa-plus"></i> Add Product';
-        imagePreview.style.display = "none";
-        imagePreview.src = "";
-    };
-
-    const populateForm = (product) => {
-        document.getElementById("productId").value = product.id;
-        document.getElementById("productName").value = product.name;
-        document.getElementById("productPrice").value = product.price;
-        document.getElementById("productCategory").value = product.category;
-        document.getElementById("productDescription").value = product.description;
-
-        if (product.image) {
-            imagePreview.src = product.image;
-            imagePreview.style.display = "block";
-        }
-
-        editingProductId = product.id;
-        document.getElementById("submitBtn").innerHTML = '<i class="fas fa-save"></i> Update Product';
-    };
-
-    // --- IMAGE HANDLING ---
-    const handleImageUpload = (file) => {
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                imagePreview.src = e.target.result;
-                imagePreview.style.display = "block";
-            };
-            reader.readAsDataURL(file);
-        }
-    };
-
-    // --- EVENT LISTENERS ---
-    loginFormEl.addEventListener("submit", (e) => {
-        e.preventDefault();
-        const username = document.getElementById("username").value;
-        const password = document.getElementById("password").value;
-        login(username, password);
-    });
-
-    logoutBtn.addEventListener("click", logout);
-
-    productForm.addEventListener("submit", (e) => {
-        e.preventDefault();
-
-        const productData = {
-            name: document.getElementById("productName").value.trim(),
-            price: parseFloat(document.getElementById("productPrice").value),
-            category: document.getElementById("productCategory").value,
-            description: document.getElementById("productDescription").value.trim(),
-            image: imagePreview.src || "placeholder.jpg"
-        };
-
-        if (!productData.name || !productData.price || !productData.category || !productData.description) {
-            showError("Please fill in all required fields");
-            return;
-        }
-
-        if (editingProductId) {
-            updateProduct(editingProductId, productData);
-            showSuccess("Product updated successfully!");
-        } else {
-            addProduct(productData);
-            showSuccess("Product added successfully!");
-        }
-
-        resetForm();
-    });
-
-    // Image upload
-    document.getElementById("productImage").addEventListener("change", (e) => {
-        const file = e.target.files[0];
-        handleImageUpload(file);
-    });
-
-    // Product list actions
-    productList.addEventListener("click", (e) => {
-        const target = e.target;
-        const productId = target.closest(".product-item")?.dataset.id;
-
-        if (target.classList.contains("btn-edit") || target.closest(".btn-edit")) {
-            e.preventDefault();
-            const product = getProduct(productId);
-            if (product) {
-                populateForm(product);
-            }
-        } else if (target.classList.contains("btn-delete") || target.closest(".btn-delete")) {
-            e.preventDefault();
-            if (confirm("Are you sure you want to delete this product?")) {
-                deleteProduct(productId);
-            }
-        }
-    });
-
-    // --- INITIALIZE ---
-    checkAuth();
-
-    showSuccess('Seller dashboard loaded successfully');
+  checkAuth();
 });

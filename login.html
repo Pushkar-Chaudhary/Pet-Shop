@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Customer login and account creation for Pet Shop ordering.">
+    <title>Customer Login - Pet Shop</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header class="auth-header">
+        <div class="header-content">
+            <a href="index.html" class="logo">Pet Shop 🐾</a>
+            <a href="seller.html" class="link-btn">Seller Login</a>
+        </div>
+    </header>
+
+    <main class="auth-shell">
+        <section class="auth-card">
+            <p class="eyebrow">Customer access</p>
+            <h1>Login to order your pet products</h1>
+            <p class="subtle">Use your account to checkout safely. Demo account: customer@petshop.com / petshop123</p>
+
+            <form id="loginForm" class="auth-form">
+                <label for="email">Email</label>
+                <input id="email" type="email" placeholder="you@example.com" required>
+
+                <label for="password">Password</label>
+                <input id="password" type="password" placeholder="Enter your password" required>
+
+                <button type="submit" class="btn-buy">Login</button>
+            </form>
+
+            <p id="authMessage" class="auth-message"></p>
+        </section>
+
+        <section class="auth-card alt-card">
+            <p class="eyebrow">New here?</p>
+            <h2>Create an account</h2>
+            <p class="subtle">Create a customer account in one step and use it on every order.</p>
+
+            <form id="signupForm" class="auth-form">
+                <label for="signupName">Full Name</label>
+                <input id="signupName" type="text" placeholder="Asha Sharma" required>
+
+                <label for="signupEmail">Email</label>
+                <input id="signupEmail" type="email" placeholder="asha@example.com" required>
+
+                <label for="signupPassword">Password</label>
+                <input id="signupPassword" type="password" placeholder="Create a password" required>
+
+                <button type="submit" class="btn-add">Create Account</button>
+            </form>
+        </section>
+    </main>
+
+    <script src="auth.js"></script>
+    <script src="login.js"></script>
+</body>
+</html>

@@ -3,75 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Purchase your favorite pet or pet accessory. Secure checkout with fast delivery.">
-    <meta name="keywords" content="buy pets, pet purchase, pet accessories, secure checkout">
-    <meta name="author" content="Pet Shop">
-    <meta name="robots" content="noindex, nofollow">
-    <link rel="icon" type="image/x-icon" href="favicon.ico">
-    <title>Purchase - Pet Shop</title>
-
-    <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
-    <!-- LINK TO CSS -->
-    <link rel="stylesheet" href="styles.css">
+    <title>Redirecting to Checkout - Pet Shop</title>
+    <link rel="canonical" href="checkout.html">
+    <script>
+        (function () {
+            var params = new URLSearchParams(window.location.search);
+            if (!params.has('buyNow')) params.set('buyNow', '1');
+            var target = 'checkout.html' + (params.toString() ? '?' + params.toString() : '');
+            window.location.replace(target);
+        })();
+    </script>
 </head>
 <body>
-
-<div class="buy-container">
-    <h2>Confirm Purchase</h2>
-    
-    <form id="buyForm">
-        <!-- Product Selection -->
-        <label>Choose Product:</label>
-        <select id="product" name="product_name" required>
-            <option value="" disabled selected>Select a product</option>
-            <!-- Cats -->
-            <option value="Judging Cat" data-price="300">Judging Cat 🐱</option>
-            <option value="Lazy Cat" data-price="280">Lazy Cat 😴</option>
-            <option value="Cute Shorthair" data-price="350">Cute Shorthair 😸</option>
-            <option value="Short Legged Cat" data-price="400">Short Legged Cat 🐈</option>
-            <option value="Fluffy Cat" data-price="320">Fluffy Cat 🧸</option>
-            <!-- Dogs -->
-            <option value="Friendly Dog" data-price="450">Friendly Dog 🐶</option>
-            <option value="Loyal Dog" data-price="500">Loyal Dog 🐕</option>
-            <option value="Energetic Dog" data-price="480">Energetic Dog 🦮</option>
-            <!-- Accessories -->
-            <option value="Dog Food" data-price="120">Dog Food Pack 🍖</option>
-            <option value="Cat Food" data-price="110">Cat Food Pack 🐟</option>
-            <option value="Pet Collar" data-price="80">Pet Collar 📿</option>
-            <option value="Net Carrier" data-price="200">Net Carrier 🎒</option>
-            <option value="Shield Carrier" data-price="250">Shield Carrier 🛡️</option>
-            <option value="Pet Toys" data-price="150">Pet Toys 🎾</option>
-        </select>
-
-        <!-- Quantity -->
-        <label>Quantity:</label>
-        <input type="number" id="quantity" name="quantity" value="1" min="1" required>
-
-        <!-- Total Price Display -->
-        <div class="price-box">
-            Total: रू<span id="total">0</span>
-        </div>
-
-        <!-- Buyer Info -->
-        <label>Your Name:</label>
-        <input type="text" name="buyer_name" placeholder="John Doe" required>
-        
-        <label>Your Email:</label>
-        <input type="email" name="buyer_email" placeholder="john@example.com" required>
-
-        <input type="hidden" id="priceField" name="total_price">
-
-        <button type="submit" class="btn-buy">Buy Now</button>
-    </form>
-</div>
-
-<!-- EmailJS Library (Optional) -->
-<script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
-
-<!-- LINK TO JS -->
-<script src="buy.js"></script>
-
+    <p>Redirecting to checkout… <a href="checkout.html">Click here</a> if you are not redirected.</p>
 </body>
 </html>
