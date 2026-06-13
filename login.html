@@ -34,13 +34,17 @@
                 <button type="submit" class="btn-buy">Login</button>
             </form>
 
+            <div class="auth-divider">or continue with</div>
+            <div id="googleSignInButton" class="google-signin"></div>
+            <p id="googleAuthHint" class="auth-message" style="margin-top: 0.5rem;"></p>
+
             <p id="authMessage" class="auth-message"></p>
         </section>
 
         <section class="auth-card alt-card">
             <p class="eyebrow">New here?</p>
             <h2>Create an account</h2>
-            <p class="subtle">Create a customer account in one step and use it on every order.</p>
+            <p class="subtle">Create a customer or seller account in one step.</p>
 
             <form id="signupForm" class="auth-form">
                 <label for="signupName">Full Name</label>
@@ -52,12 +56,44 @@
                 <label for="signupPassword">Password</label>
                 <input id="signupPassword" type="password" placeholder="Create a password" required>
 
+                <label for="signupRole">Register as</label>
+                <select id="signupRole" required style="width: 100%; padding: 0.85rem 0.9rem; border-radius: var(--radius); border: 1px solid var(--border); background: var(--bg-secondary); color: var(--text);">
+                    <option value="customer" selected>Customer (Buyer)</option>
+                    <option value="seller">Seller</option>
+                </select>
+
+                <label for="signupMobile">Mobile Number</label>
+                <input id="signupMobile" type="tel" placeholder="e.g. 9841234567" required>
+
+                <div id="panGroup" style="display: none; flex-direction: column; gap: 0.75rem;">
+                    <label for="signupPan">PAN Number</label>
+                    <input id="signupPan" type="text" placeholder="e.g. 123456789">
+                </div>
+
                 <button type="submit" class="btn-add">Create Account</button>
             </form>
         </section>
     </main>
 
+    <!-- OTP Verification Modal -->
+    <div id="otpModal" class="modal-overlay" style="display: none;">
+        <div class="modal-content">
+            <p class="eyebrow" style="text-transform: uppercase; letter-spacing: 0.18em; font-size: 0.78rem; color: var(--primary); font-weight: 700; text-align: center;">Verification</p>
+            <h2 style="font-size: 1.6rem; text-align: center; margin: 0.35rem 0 0.5rem;">Enter OTP Code</h2>
+            <p class="subtle" id="otpDescription" style="text-align: center; margin-bottom: 1.5rem;">We have sent a 6-digit OTP code to your email address.</p>
+            
+            <form id="otpForm" class="auth-form">
+                <input id="otpCode" type="text" maxlength="6" placeholder="******" required style="text-align: center; font-size: 24px; letter-spacing: 6px; font-weight: bold; padding: 10px; width: 100%; border-radius: var(--radius); border: 1px solid var(--border); background: var(--bg-secondary); color: var(--text);">
+                <button type="submit" class="btn-buy" style="margin-top: 1.2rem; width: 100%; padding: 0.85rem; border-radius: var(--radius); font-weight: 600; cursor: pointer;">Verify & Create Account</button>
+                <button type="button" id="resendOtpButton" class="btn-resend-otp" style="margin-top: 0.75rem; width: 100%; padding: 0.8rem; border-radius: var(--radius); background: transparent; border: 1px solid var(--border); color: var(--text); font-weight: 600; cursor: pointer;">Resend OTP</button>
+            </form>
+            <p id="otpMessage" class="auth-message" style="text-align: center; margin-top: 10px;"></p>
+            <button type="button" id="closeOtpModal" style="margin-top: 10px; width: 100%; padding: 0.85rem; border-radius: var(--radius); background: transparent; border: 1px solid var(--border); color: var(--text); font-weight: 500; cursor: pointer;">Cancel</button>
+        </div>
+    </div>
+
     <script src="auth.js"></script>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
     <script src="login.js"></script>
 </body>
 </html>

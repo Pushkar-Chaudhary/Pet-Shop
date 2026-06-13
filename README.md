@@ -41,8 +41,14 @@ Create a `.env` file for Google Sign-In:
 
 ```
 GOOGLE_CLIENT_ID=your-google-client-id
+SMTP_USER=your-smtp-user
+SMTP_PASS=your-smtp-password
+DEFAULT_SELLER_EMAIL=seller@example.com
+OTP_TTL_MS=600000
 PORT=3000
 ```
+
+The login and signup flow now sends a one-time password to the account email before issuing a session token. For local testing, OTP and order emails are written to `data/emails-debug.log` when SMTP is not configured.
 
 ## Project structure
 

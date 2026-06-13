@@ -348,6 +348,23 @@
         </form>
     </div>
 
+    <!-- OTP VERIFICATION MODAL -->
+    <div id="otpModal" class="modal-overlay" style="display: none;">
+        <div class="modal-content">
+            <p class="eyebrow" style="text-transform: uppercase; letter-spacing: 0.18em; font-size: 0.78rem; color: var(--primary); font-weight: 700; text-align: center;">Verification</p>
+            <h2 style="font-size: 1.6rem; text-align: center; margin: 0.35rem 0 0.5rem;">Enter OTP Code</h2>
+            <p class="subtle" id="otpDescription" style="text-align: center; margin-bottom: 1.5rem;">We have sent a 6-digit OTP code to your seller email address.</p>
+
+            <form id="otpForm" class="auth-form">
+                <input id="otpCode" type="text" maxlength="6" placeholder="******" required style="text-align: center; font-size: 24px; letter-spacing: 6px; font-weight: bold; padding: 10px; width: 100%; border-radius: var(--radius); border: 1px solid var(--border); background: var(--bg-secondary); color: var(--text);">
+                <button type="submit" class="btn-submit" style="margin-top: 1.2rem; width: 100%; padding: 0.85rem; border-radius: var(--radius); font-weight: 600; cursor: pointer;">Verify & Login</button>
+                <button type="button" id="resendOtpButton" style="margin-top: 0.75rem; width: 100%; padding: 0.8rem; border-radius: var(--radius); background: transparent; border: 1px solid var(--border); color: var(--text); font-weight: 600; cursor: pointer;">Resend OTP</button>
+            </form>
+            <p id="otpMessage" class="auth-message" style="text-align: center; margin-top: 10px;"></p>
+            <button type="button" id="closeOtpModal" style="margin-top: 10px; width: 100%; padding: 0.85rem; border-radius: var(--radius); background: transparent; border: 1px solid var(--border); color: var(--text); font-weight: 500; cursor: pointer;">Cancel</button>
+        </div>
+    </div>
+
     <!-- DASHBOARD (shown when logged in) -->
     <div class="seller-dashboard" id="dashboard" style="display: none;">
         <div class="seller-header">

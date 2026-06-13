@@ -3,6 +3,13 @@ document.addEventListener('DOMContentLoaded', () => {
   const dashboard = document.getElementById('dashboard');
   const loginFormEl = document.getElementById('loginFormEl');
   const logoutBtn = document.getElementById('logoutBtn');
+  const otpModal = document.getElementById('otpModal');
+  const otpForm = document.getElementById('otpForm');
+  const otpCode = document.getElementById('otpCode');
+  const otpMessage = document.getElementById('otpMessage');
+  const otpDescription = document.getElementById('otpDescription');
+  const resendOtpButton = document.getElementById('resendOtpButton');
+  const closeOtpModal = document.getElementById('closeOtpModal');
   const productForm = document.getElementById('productForm');
   const productList = document.getElementById('productList');
   const orderList = document.getElementById('orderList');
@@ -18,6 +25,10 @@ document.addEventListener('DOMContentLoaded', () => {
   let products = [];
   let orders = [];
   let editingProductId = null;
+  let pendingOtp = null;
+  let resendCooldownUntil = 0;
+  let resendTimer = null;
+  const RESEND_COOLDOWN_MS = 30000;
 
   const showStatus = (message, type = 'success') => {
     if (!statusMessage) return;
@@ -27,6 +38,71 @@ document.addEventListener('DOMContentLoaded', () => {
       statusMessage.textContent = '';
       statusMessage.className = 'auth-message';
     }, 3500);
+  };
+
+  const showOtpMessage = (message, type = 'success') => {
+    if (!otpMessage) return;
+    otpMessage.textContent = message;
+    otpMessage.className = `auth-message ${type}`;
+  };
+
+  const getResendButtonLabel = () => {
+    const remaining = Math.max(0, resendCooldownUntil - Date.now());
+    return remaining > 0 ? `Resend OTP (${Math.ceil(remaining / 1000)}s)` : 'Resend OTP';
+  };
+
+  const updateResendButton = () => {
+    if (!resendOtpButton) return;
+    const remaining = Math.max(0, resendCooldownUntil - Date.now());
+    resendOtpButton.textContent = getResendButtonLabel();
+    resendOtpButton.disabled = !pendingOtp || remaining > 0;
+
+    if (resendTimer) {
+      window.clearInterval(resendTimer);
+      resendTimer = null;
+    }
+
+    if (pendingOtp && remaining > 0) {
+      resendTimer = window.setInterval(() => {
+        const left = Math.max(0, resendCooldownUntil - Date.now());
+        resendOtpButton.textContent = getResendButtonLabel();
+        resendOtpButton.disabled = !pendingOtp || left > 0;
+
+        if (left <= 0 && resendTimer) {
+          window.clearInterval(resendTimer);
+          resendTimer = null;
+          resendOtpButton.textContent = 'Resend OTP';
+          resendOtpButton.disabled = !pendingOtp;
+        }
+      }, 250);
+    }
+  };
+
+  const startResendCooldown = () => {
+    resendCooldownUntil = Date.now() + RESEND_COOLDOWN_MS;
+    updateResendButton();
+  };
+
+  const clearResendState = () => {
+    resendCooldownUntil = 0;
+    if (resendTimer) {
+      window.clearInterval(resendTimer);
+      resendTimer = null;
+    }
+    updateResendButton();
+  };
+
+  const setOtpModalOpen = (isOpen) => {
+    if (!otpModal) return;
+    otpModal.style.display = isOpen ? 'flex' : 'none';
+    if (!isOpen) {
+      pendingOtp = null;
+      clearResendState();
+      if (otpCode) otpCode.value = '';
+      showOtpMessage('');
+    } else {
+      updateResendButton();
+    }
   };
 
   const getToken = () => PetShopAuth.getSession()?.token || '';
@@ -57,24 +133,82 @@ document.addEventListener('DOMContentLoaded', () => {
     return false;
   };
 
-  const login = async (username, password) => {
+  const requestOtp = async (username, password) => {
     try {
-      const response = await fetch('/api/auth/login', {
+      const response = await fetch('/api/auth/login/request-otp', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, password })
       });
       const data = await response.json();
-      if (!response.ok) throw new Error(data.error || 'Invalid username or password');
-      if (data.user.role !== 'seller') throw new Error('Seller account required');
+      if (!response.ok) throw new Error(data.error || 'Could not send OTP');
 
-      PetShopAuth.saveSession(data.user, data.token);
-      showDashboard();
-      showStatus('Welcome back, ' + data.user.name + '!');
+      pendingOtp = { challengeId: data.challengeId, delivery: data.delivery };
+      pendingOtp.endpoint = '/api/auth/login/request-otp';
+      pendingOtp.payload = { username, password };
+      if (otpDescription) {
+        otpDescription.textContent = `We have sent a 6-digit OTP code to ${data.delivery}.`;
+      }
+      setOtpModalOpen(true);
+      startResendCooldown();
+      showOtpMessage('');
+      showStatus(`OTP sent to ${data.delivery}.`);
+      if (otpCode) otpCode.focus();
       return true;
     } catch (error) {
       showStatus(error.message || 'Invalid username or password', 'error');
       return false;
+    }
+  };
+
+  const verifyOtp = async (otp) => {
+    const response = await fetch('/api/auth/login/verify', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ challengeId: pendingOtp?.challengeId, otp })
+    });
+
+    const data = await response.json();
+    if (!response.ok) throw new Error(data.error || 'OTP verification failed');
+    if (data.user.role !== 'seller') throw new Error('Seller account required');
+
+    PetShopAuth.saveSession(data.user, data.token);
+    setOtpModalOpen(false);
+    showDashboard();
+    showStatus('Welcome back, ' + data.user.name + '!');
+  };
+
+  const resendOtp = async () => {
+    if (!pendingOtp) {
+      showOtpMessage('Start the login flow again.', 'error');
+      return;
+    }
+
+    if (Date.now() < resendCooldownUntil) {
+      showOtpMessage(`Please wait ${Math.ceil((resendCooldownUntil - Date.now()) / 1000)} seconds before resending.`, 'error');
+      return;
+    }
+
+    try {
+      showOtpMessage('Resending OTP...');
+      const response = await fetch(pendingOtp.endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(pendingOtp.payload)
+      });
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.error || 'Could not resend OTP');
+
+      pendingOtp.challengeId = data.challengeId;
+      pendingOtp.delivery = data.delivery;
+      if (otpDescription) {
+        otpDescription.textContent = `We have sent a 6-digit OTP code to ${data.delivery}.`;
+      }
+      startResendCooldown();
+      showOtpMessage(`OTP resent to ${data.delivery}.`, 'success');
+      if (otpCode) otpCode.focus();
+    } catch (error) {
+      showOtpMessage(error.message || 'Could not resend OTP.', 'error');
     }
   };
 
@@ -180,6 +314,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <select class="order-status-select" data-id="${order.id}">
               <option value="pending" ${status === 'pending' ? 'selected' : ''}>Pending</option>
               <option value="confirmed" ${status === 'confirmed' ? 'selected' : ''}>Confirmed</option>
+              <option value="packed" ${status === 'packed' ? 'selected' : ''}>Packed</option>
               <option value="shipped" ${status === 'shipped' ? 'selected' : ''}>Shipped</option>
               <option value="delivered" ${status === 'delivered' ? 'selected' : ''}>Delivered</option>
               <option value="cancelled" ${status === 'cancelled' ? 'selected' : ''}>Cancelled</option>
@@ -221,8 +356,46 @@ document.addEventListener('DOMContentLoaded', () => {
 
   loginFormEl.addEventListener('submit', (event) => {
     event.preventDefault();
-    login(document.getElementById('username').value.trim(), document.getElementById('password').value);
+    requestOtp(document.getElementById('username').value.trim(), document.getElementById('password').value);
   });
+
+  if (otpForm) {
+    otpForm.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const code = otpCode ? otpCode.value.trim() : '';
+      if (!pendingOtp) {
+        showOtpMessage('Start the login flow again.', 'error');
+        return;
+      }
+      if (!code) {
+        showOtpMessage('Enter the 6-digit code.', 'error');
+        return;
+      }
+
+      try {
+        await verifyOtp(code);
+      } catch (error) {
+        showOtpMessage(error.message || 'Could not verify OTP.', 'error');
+      }
+    });
+  }
+
+  if (closeOtpModal) {
+    closeOtpModal.addEventListener('click', () => setOtpModalOpen(false));
+  }
+
+  if (resendOtpButton) {
+    resendOtpButton.addEventListener('click', resendOtp);
+    updateResendButton();
+  }
+
+  if (otpModal) {
+    otpModal.addEventListener('click', (event) => {
+      if (event.target === otpModal) {
+        setOtpModalOpen(false);
+      }
+    });
+  }
 
   logoutBtn.addEventListener('click', logout);
 
