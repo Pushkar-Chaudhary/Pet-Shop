@@ -105,8 +105,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
-  const getToken = () => PetShopAuth.getSession()?.token || '';
-
   const showLogin = () => {
     loginForm.style.display = 'block';
     dashboard.style.display = 'none';
@@ -234,7 +232,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const loadOrders = async () => {
     try {
       const response = await fetch('/api/orders', {
-        headers: { Authorization: getToken() }
+        credentials: 'include'
       });
       const data = await response.json();
       if (!response.ok) throw new Error(data.error || 'Failed to load orders');
@@ -252,9 +250,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const response = await fetch('/api/products', {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json',
-        Authorization: getToken()
+        'Content-Type': 'application/json'
       },
+      credentials: 'include',
       body: JSON.stringify(products)
     });
     const data = await response.json();
@@ -272,7 +270,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     productList.innerHTML = products.map((product) => `
       <div class="product-item" data-id="${product.id}">
-        <img src="${product.image}" alt="${product.name}" class="product-image" onerror="this.src='placeholder.jpg'">
+        <img src="${product.image}" alt="${product.name}" class="product-image" onerror="this.src='placeholder.svg'">
         <div class="product-info">
           <h4>${product.name}</h4>
           <p>${product.description}</p>
@@ -408,7 +406,7 @@ document.addEventListener('DOMContentLoaded', () => {
       category: document.getElementById('productCategory').value,
       subcategory: document.getElementById('productSubcategory').value,
       description: document.getElementById('productDescription').value.trim(),
-      image: document.getElementById('productImageUrl').value.trim() || imagePreview.src || 'placeholder.jpg'
+      image: document.getElementById('productImageUrl').value.trim() || imagePreview.src || 'placeholder.svg'
     };
 
     if (!productData.name || !productData.price || !productData.category || !productData.description) {
@@ -477,9 +475,9 @@ document.addEventListener('DOMContentLoaded', () => {
       const response = await fetch('/api/orders/' + select.dataset.id, {
         method: 'PATCH',
         headers: {
-          'Content-Type': 'application/json',
-          Authorization: getToken()
+          'Content-Type': 'application/json'
         },
+        credentials: 'include',
         body: JSON.stringify({ status: select.value })
       });
       const data = await response.json();

@@ -127,7 +127,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       const cartItemEl = document.createElement('div');
       cartItemEl.className = 'cart-item';
       cartItemEl.innerHTML = `
-        <img src="${product?.image || 'placeholder.jpg'}" alt="${item.name}" onerror="this.src='placeholder.jpg'">
+        <img src="${product?.image || 'placeholder.svg'}" alt="${item.name}" onerror="this.src='placeholder.svg'">
         <div class="cart-item-details">
           <h4>${item.name}</h4>
           <p>रू${price.toFixed(2)} each</p>

@@ -124,27 +124,19 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   const requestOtp = async (endpoint, payload, purpose) => {
-    const response = await fetch(endpoint, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
-    });
-
-    const data = await response.json();
-    if (!response.ok) throw new Error(data.error || `Unable to start ${purpose}`);
-    return data;
+    try {
+      return await PetShopAuth.loginWithOtp(endpoint, payload);
+    } catch (error) {
+      throw new Error(error.message || `Unable to start ${purpose}`);
+    }
   };
 
   const verifyOtp = async (endpoint, payload) => {
-    const response = await fetch(endpoint, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
-    });
-
-    const data = await response.json();
-    if (!response.ok) throw new Error(data.error || 'OTP verification failed');
-    return data;
+    try {
+      return await PetShopAuth.verifyOtp(endpoint, payload);
+    } catch (error) {
+      throw new Error(error.message || 'OTP verification failed');
+    }
   };
 
   const beginLogin = async (event) => {
@@ -252,7 +244,7 @@ document.addEventListener('DOMContentLoaded', () => {
         otp: code
       });
 
-      PetShopAuth.saveSession(data.user, data.token);
+      PetShopAuth.saveSession(data.user);
       setOtpModalOpen(false);
       showMessage(pendingOtp.mode === 'login' ? 'Login successful. Redirecting…' : 'Account created. Redirecting…');
       setTimeout(() => redirectAfterLogin(data.user), 400);
@@ -300,7 +292,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const data = await response.json();
       if (!response.ok) throw new Error(data.error || 'Google sign-in failed');
 
-      PetShopAuth.saveSession(data.user, data.token);
+      PetShopAuth.saveSession(data.user);
       showGoogleMessage('Google sign-in successful. Redirecting...');
       setTimeout(() => redirectAfterLogin(data.user), 400);
     } catch (error) {

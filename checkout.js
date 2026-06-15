@@ -128,7 +128,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         const itemEl = document.createElement('div');
         itemEl.className = 'cart-item checkout-cart-item';
         itemEl.innerHTML = `
-          <img src="${product?.image || 'placeholder.jpg'}" alt="${item.name}" onerror="this.src='placeholder.jpg'">
+          <img src="${product?.image || 'placeholder.svg'}" alt="${item.name}" onerror="this.src='placeholder.svg'">
           <div class="cart-item-info">
             <h4>${item.name}</h4>
             <p>रू${price} × ${item.quantity} = रू${itemTotal}</p>
@@ -301,6 +301,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       const response = await fetch('/api/orders', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
         body: JSON.stringify(orderData)
       });
       const result = await response.json();

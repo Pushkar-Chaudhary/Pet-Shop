@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-labelledby="title desc">
+  <title id="title">Pet Toys</title>
+  <desc id="desc">A playful illustration for the Pet Toys product.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fff7ed"/>
+      <stop offset="100%" stop-color="#fde68a"/>
+    </linearGradient>
+  </defs>
+  <rect width="400" height="300" rx="28" fill="url(#bg)"/>
+  <circle cx="128" cy="116" r="36" fill="#fb7185"/>
+  <circle cx="264" cy="110" r="30" fill="#38bdf8"/>
+  <circle cx="218" cy="176" r="44" fill="#f59e0b"/>
+  <circle cx="128" cy="116" r="12" fill="#fff"/>
+  <circle cx="264" cy="110" r="10" fill="#fff"/>
+  <circle cx="218" cy="176" r="14" fill="#fff"/>
+  <path d="M96 200c36-24 84-24 120 0s84 24 120 0" fill="none" stroke="#d97706" stroke-width="10" stroke-linecap="round"/>
+  <text x="200" y="252" text-anchor="middle" font-family="Arial, sans-serif" font-size="28" fill="#7c2d12" font-weight="700">Pet Toys</text>
+</svg>

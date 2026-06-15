@@ -15,7 +15,7 @@ window.PetShopProducts = (function () {
     { id: 'pet-collar', name: 'Pet Collar', price: 80, category: 'accessory', subcategory: 'gear', description: 'Durable collars to keep your pets safe and stylish.', image: 'petcollar.jpeg' },
     { id: 'net-carrier', name: 'Net Carrier', price: 200, category: 'accessory', subcategory: 'gear', description: 'Convenient and comfortable carriers for your pets with nets.', image: 'carrybag1.jpeg' },
     { id: 'shield-carrier', name: 'Shield Carrier', price: 250, category: 'accessory', subcategory: 'gear', description: 'Comfortable and stylish carriers with a protective shield.', image: 'carrybag2.jpeg' },
-    { id: 'pet-toys', name: 'Pet Toys', price: 150, category: 'accessory', subcategory: 'gear', description: 'Fun toys to keep your pets entertained and active.', image: 'pettoys.jpg' }
+    { id: 'pet-toys', name: 'Pet Toys', price: 150, category: 'accessory', subcategory: 'gear', description: 'Fun toys to keep your pets entertained and active.', image: 'pettoys.svg' }
   ];
 
   async function fetchProducts(forceRefresh = false) {
@@ -87,7 +87,7 @@ window.PetShopProducts = (function () {
     const cardClass = product.category === 'pet' ? 'animal' : 'accessory';
     return `
       <div class="${cardClass}">
-        <img src="${product.image}" alt="${product.name}" data-name="${product.name}" onerror="this.src='placeholder.jpg'">
+        <img src="${product.image}" alt="${product.name}" data-name="${product.name}" onerror="this.src='placeholder.svg'">
         <div class="card-content">
           <h3>${product.name}</h3>
           <p>${product.description}</p>

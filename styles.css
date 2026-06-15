@@ -1,53 +1,53 @@
 /* --- CSS VARIABLES & THEMES --- */
 :root {
     /* Light Theme (Default) */
-    --primary: #2563eb;
-    --primary-dark: #1d4ed8;
-    --primary-light: #dbeafe;
-    --secondary: #10b981;
-    --accent: #f59e0b;
-    --bg: #ffffff;
-    --bg-secondary: #f8fafc;
-    --text: #1e293b;
-    --text-secondary: #64748b;
-    --border: #e2e8f0;
-    --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
-    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
-    --radius: 8px;
-    --radius-lg: 12px;
+    --primary: #0f766e;
+    --primary-dark: #115e59;
+    --primary-light: #ccfbf1;
+    --secondary: #d97706;
+    --accent: #e11d48;
+    --bg: #fffdf8;
+    --bg-secondary: #f7f3eb;
+    --text: #1f2937;
+    --text-secondary: #6b7280;
+    --border: #e7e0d4;
+    --shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+    --shadow-lg: 0 22px 50px rgba(15, 23, 42, 0.14);
+    --radius: 14px;
+    --radius-lg: 24px;
     --sidebar-width: 350px;
 }
 
 /* Dark Theme */
 [data-theme="dark"] {
-    --primary: #3b82f6;
-    --primary-dark: #2563eb;
-    --primary-light: #1e40af;
-    --secondary: #34d399;
-    --accent: #fbbf24;
+    --primary: #2dd4bf;
+    --primary-dark: #14b8a6;
+    --primary-light: #134e4a;
+    --secondary: #f59e0b;
+    --accent: #fb7185;
     --bg: #0f172a;
-    --bg-secondary: #1e293b;
-    --text: #f1f5f9;
-    --text-secondary: #94a3b8;
-    --border: #334155;
-    --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.3), 0 1px 2px -1px rgb(0 0 0 / 0.3);
-    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.3), 0 4px 6px -4px rgb(0 0 0 / 0.3);
+    --bg-secondary: #172033;
+    --text: #f8fafc;
+    --text-secondary: #cbd5e1;
+    --border: #243244;
+    --shadow: 0 8px 24px rgba(2, 6, 23, 0.28);
+    --shadow-lg: 0 22px 50px rgba(2, 6, 23, 0.42);
 }
 
 /* Colorful Theme */
 [data-theme="colorful"] {
-    --primary: #8b5cf6;
-    --primary-dark: #7c3aed;
-    --primary-light: #a78bfa;
-    --secondary: #06b6d4;
-    --accent: #f59e0b;
-    --bg: #fef7ed;
-    --bg-secondary: #fef3c7;
-    --text: #92400e;
-    --text-secondary: #a16207;
-    --border: #fed7aa;
-    --shadow: 0 1px 3px 0 rgb(245 158 11 / 0.1), 0 1px 2px -1px rgb(245 158 11 / 0.1);
-    --shadow-lg: 0 10px 15px -3px rgb(245 158 11 / 0.1), 0 4px 6px -4px rgb(245 158 11 / 0.1);
+    --primary: #7c3aed;
+    --primary-dark: #6d28d9;
+    --primary-light: #ede9fe;
+    --secondary: #0891b2;
+    --accent: #ea580c;
+    --bg: #fffaf4;
+    --bg-secondary: #fff1df;
+    --text: #3f2a12;
+    --text-secondary: #7c4a17;
+    --border: #f3d7b6;
+    --shadow: 0 8px 24px rgba(124, 58, 237, 0.08);
+    --shadow-lg: 0 22px 50px rgba(124, 58, 237, 0.14);
 }
 
 * {
@@ -57,12 +57,13 @@
 }
 
 body {
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-family: 'Manrope', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     line-height: 1.6;
     color: var(--text);
     background:
-        radial-gradient(circle at top, rgba(37, 99, 235, 0.05), transparent 25%),
-        linear-gradient(180deg, #f8fbff 0%, var(--bg) 100%);
+        radial-gradient(circle at 15% 10%, rgba(217, 119, 6, 0.11), transparent 22%),
+        radial-gradient(circle at 85% 0%, rgba(15, 118, 110, 0.12), transparent 18%),
+        linear-gradient(180deg, #fffaf2 0%, var(--bg) 100%);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     transition: background-color 0.3s ease, color 0.3s ease;
@@ -70,23 +71,39 @@ body {
 
 /* --- HEADER --- */
 header {
-    background: var(--bg);
+    background: color-mix(in srgb, var(--bg) 88%, transparent);
     border-bottom: 1px solid var(--border);
     position: sticky;
     top: 0;
     z-index: 1000;
-    backdrop-filter: blur(8px);
+    backdrop-filter: blur(18px);
+    box-shadow: 0 12px 30px rgba(15, 23, 42, 0.04);
     transition: all 0.3s ease;
 }
 
 .header-content {
-    max-width: 1400px;
+    max-width: 1240px;
     margin: 0 auto;
     display: flex;
     justify-content: space-between;
     align-items: center;
     gap: 1rem;
     padding: 1rem 1.5rem;
+}
+
+.logo {
+    font-family: 'Fraunces', 'Georgia', serif;
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--text);
+    text-decoration: none;
+    letter-spacing: -0.03em;
+    transition: color 0.3s ease, transform 0.2s ease;
+}
+
+.logo:hover {
+    color: var(--primary);
+    transform: translateY(-1px);
 }
 
 .nav-links {
@@ -120,15 +137,6 @@ header {
     cursor: pointer;
 }
 
-.logo {
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: var(--primary);
-    text-decoration: none;
-    letter-spacing: -0.025em;
-    transition: color 0.3s ease;
-}
-
 .header-controls {
     display: flex;
     align-items: center;
@@ -138,18 +146,22 @@ header {
 /* Theme Selector */
 .theme-selector {
     display: flex;
-    gap: 0.5rem;
-    padding: 0.25rem;
+    gap: 0.35rem;
+    padding: 0.3rem;
     background: var(--bg-secondary);
-    border-radius: var(--radius);
+    border-radius: 999px;
     border: 1px solid var(--border);
 }
 
 .theme-btn {
-    padding: 0.5rem;
+    width: 2.2rem;
+    height: 2.2rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     border: none;
     background: transparent;
-    border-radius: var(--radius);
+    border-radius: 999px;
     cursor: pointer;
     color: var(--text-secondary);
     transition: all 0.3s ease;
@@ -164,14 +176,14 @@ header {
 .theme-btn.active {
     background: var(--primary);
     color: white;
-    box-shadow: var(--shadow);
+    box-shadow: 0 8px 18px rgba(15, 118, 110, 0.25);
 }
 
 /* Cart Toggle Button */
 .cart-toggle-btn {
     position: relative;
     padding: 0.75rem;
-    border-radius: var(--radius);
+    border-radius: 999px;
     transition: all 0.3s ease;
     cursor: pointer;
     color: var(--text-secondary);
@@ -213,8 +225,8 @@ header {
 .main-content {
     flex: 1;
     width: 100%;
-    padding: 0 1rem;
-    max-width: 700px;
+    padding: 0 1rem 2rem;
+    max-width: 1180px;
     margin: 0 auto;
     transition: max-width 0.3s ease;
 }
@@ -222,12 +234,17 @@ header {
 /* --- WELCOME --- */
 .welcome {
     text-align: center;
-    padding: 4rem 1rem 3rem;
-    background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg) 100%);
-    margin: 0 -1.5rem 2rem;
-    border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+    padding: 4.5rem 1.5rem 3.25rem;
+    background:
+        linear-gradient(135deg, color-mix(in srgb, var(--bg-secondary) 88%, white) 0%, var(--bg) 100%),
+        radial-gradient(circle at top right, rgba(217, 119, 6, 0.14), transparent 28%);
+    margin: 0 0 2rem;
+    border-radius: 0 0 32px 32px;
+    border: 1px solid var(--border);
+    border-top: 0;
     position: relative;
     overflow: hidden;
+    box-shadow: var(--shadow);
 }
 
 .welcome::before {
@@ -237,24 +254,29 @@ header {
     left: 0;
     right: 0;
     bottom: 0;
-    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="20" cy="20" r="2" fill="%23currentColor" opacity="0.1"/><circle cx="80" cy="30" r="1.5" fill="%23currentColor" opacity="0.1"/><circle cx="40" cy="70" r="1" fill="%23currentColor" opacity="0.1"/></svg>');
-    opacity: 0.5;
+    background-image:
+        radial-gradient(circle at 20% 20%, rgba(15, 118, 110, 0.08) 0 2px, transparent 3px),
+        radial-gradient(circle at 80% 30%, rgba(217, 119, 6, 0.08) 0 1.5px, transparent 2px),
+        radial-gradient(circle at 40% 70%, rgba(225, 29, 72, 0.07) 0 1px, transparent 2px);
+    background-size: 100% 100%;
+    opacity: 1;
 }
 
 .welcome h1 {
-    font-size: 2.5rem;
+    font-family: 'Fraunces', 'Georgia', serif;
+    font-size: clamp(2.4rem, 5vw, 4.25rem);
     font-weight: 700;
     color: var(--text);
-    margin-bottom: 0.5rem;
-    letter-spacing: -0.025em;
+    margin-bottom: 0.75rem;
+    letter-spacing: -0.04em;
     position: relative;
     z-index: 1;
 }
 
 .welcome p {
-    font-size: 1.125rem;
+    font-size: 1.05rem;
     color: var(--text-secondary);
-    max-width: 600px;
+    max-width: 640px;
     margin: 0 auto 2rem;
     position: relative;
     z-index: 1;
@@ -263,21 +285,23 @@ header {
 .welcome-stats {
     display: flex;
     justify-content: center;
-    gap: 2rem;
+    gap: 1rem;
     position: relative;
     z-index: 1;
+    flex-wrap: wrap;
 }
 
 .stat {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     align-items: center;
-    gap: 0.5rem;
-    padding: 1rem;
-    background: var(--bg);
-    border-radius: var(--radius);
+    gap: 0.75rem;
+    padding: 0.95rem 1.1rem;
+    background: rgba(255, 255, 255, 0.72);
+    border-radius: 999px;
     box-shadow: var(--shadow);
     border: 1px solid var(--border);
+    backdrop-filter: blur(14px);
     transition: all 0.3s ease;
 }
 
@@ -287,12 +311,12 @@ header {
 }
 
 .stat i {
-    font-size: 1.5rem;
+    font-size: 1rem;
     color: var(--primary);
 }
 
 .stat span {
-    font-size: 0.875rem;
+    font-size: 0.92rem;
     font-weight: 500;
     color: var(--text-secondary);
 }
@@ -300,18 +324,19 @@ header {
 /* --- LAYOUT --- */
 .container {
     width: 100%;
-    max-width: 700px;
+    max-width: 1180px;
     margin: 0 auto;
-    padding: 0 0.5rem;
+    padding: 0 1rem;
 }
 
 .section-title {
-    font-size: 2rem;
-    font-weight: 600;
+    font-family: 'Fraunces', 'Georgia', serif;
+    font-size: clamp(1.8rem, 3vw, 2.6rem);
+    font-weight: 700;
     color: var(--text);
     text-align: center;
-    margin: 3rem 0 2rem;
-    letter-spacing: -0.025em;
+    margin: 3rem 0 1.75rem;
+    letter-spacing: -0.03em;
     position: relative;
 }
 
@@ -321,23 +346,23 @@ header {
     bottom: -0.5rem;
     left: 50%;
     transform: translateX(-50%);
-    width: 60px;
-    height: 3px;
-    background: linear-gradient(90deg, var(--primary), var(--secondary));
-    border-radius: 2px;
+    width: 84px;
+    height: 4px;
+    background: linear-gradient(90deg, var(--primary), var(--secondary), var(--accent));
+    border-radius: 999px;
 }
 
 .section-divider {
     border: 0;
-    border-top: 2px solid var(--border);
-    margin: 4rem 0;
+    border-top: 1px solid var(--border);
+    margin: 3.5rem 0 2.5rem;
     position: relative;
 }
 
 .section-divider::after {
     content: '🐾';
     position: absolute;
-    top: -12px;
+    top: -14px;
     left: 50%;
     transform: translateX(-50%);
     background: var(--bg);
@@ -347,16 +372,15 @@ header {
 
 /* --- CARDS --- */
 .animalstopurchase, .accessories {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 2rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1.25rem;
     margin-bottom: 4rem;
 }
 
 .animal, .accessory {
-    background: var(--bg);
-    border-radius: var(--radius-lg);
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 244, 236, 0.94) 100%);
+    border-radius: 22px;
     overflow: hidden;
     box-shadow: var(--shadow);
     transition: all 0.3s ease;
@@ -383,14 +407,14 @@ header {
 }
 
 .animal:hover, .accessory:hover {
-    transform: translateY(-8px) scale(1.02);
+    transform: translateY(-6px);
     box-shadow: var(--shadow-lg);
-    border-color: var(--primary-light);
+    border-color: color-mix(in srgb, var(--primary) 30%, var(--border));
 }
 
 .animal img, .accessory img {
     width: 100%;
-    height: 220px;
+    height: 230px;
     object-fit: cover;
     transition: transform 0.3s ease;
 }
@@ -400,35 +424,47 @@ header {
 }
 
 .card-content {
-    padding: 1.5rem;
+    padding: 1.4rem 1.4rem 1rem;
 }
 
 .animal h3, .accessory h3 {
-    font-size: 1.125rem;
-    font-weight: 600;
+    font-size: 1.2rem;
+    font-weight: 700;
     color: var(--text);
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.55rem;
 }
 
 .animal p, .accessory p {
     color: var(--text-secondary);
-    font-size: 0.875rem;
-    line-height: 1.5;
-    margin-bottom: 1.5rem;
+    font-size: 0.92rem;
+    line-height: 1.6;
+    margin-bottom: 1.1rem;
+}
+
+.price-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.45rem 0.75rem;
+    border-radius: 999px;
+    margin-bottom: 1rem;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+    box-shadow: 0 10px 20px rgba(15, 118, 110, 0.16);
 }
 
 /* --- BUTTONS --- */
 .card-actions {
     display: flex;
     gap: 0.75rem;
-    padding: 0 1.5rem 1.5rem;
+    padding: 0 1.4rem 1.4rem;
 }
 
 .btn-buy, .btn-add {
     flex: 1;
-    padding: 0.75rem 1rem;
-    border-radius: var(--radius);
-    font-weight: 500;
+    padding: 0.8rem 1rem;
+    border-radius: 999px;
+    font-weight: 700;
     font-size: 0.875rem;
     text-decoration: none;
     text-align: center;
@@ -447,7 +483,7 @@ header {
 .btn-buy:hover {
     background: var(--primary-dark);
     transform: translateY(-2px);
-    box-shadow: var(--shadow);
+    box-shadow: 0 12px 24px rgba(15, 118, 110, 0.22);
 }
 
 .btn-add {
@@ -460,7 +496,7 @@ header {
     background: var(--secondary);
     color: white;
     transform: translateY(-2px);
-    box-shadow: var(--shadow);
+    box-shadow: 0 12px 24px rgba(217, 119, 6, 0.18);
 }
 
 /* --- CART SIDEBAR --- */
@@ -698,8 +734,8 @@ header {
     display: inline-flex;
     align-items: center;
     gap: 0.35rem;
-    padding: 0.6rem 0.9rem;
-    border-radius: var(--radius);
+    padding: 0.65rem 0.95rem;
+    border-radius: 999px;
     background: var(--bg-secondary);
     color: var(--text);
     text-decoration: none;
@@ -740,7 +776,7 @@ header {
 .auth-card {
     background: var(--bg);
     border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
+    border-radius: 24px;
     box-shadow: var(--shadow-lg);
     padding: 1.5rem;
 }
@@ -848,7 +884,7 @@ header {
 
 .modal-content {
     background: var(--bg);
-    border-radius: var(--radius-lg);
+    border-radius: 26px;
     max-width: 500px;
     width: 90%;
     box-shadow: var(--shadow-lg);
@@ -867,7 +903,7 @@ header {
 
 .modal-content img {
     width: 100%;
-    height: 250px;
+    height: 260px;
     object-fit: cover;
 }
 
@@ -881,9 +917,9 @@ header {
 
 .badge {
     padding: 0.375rem 0.75rem;
-    background: rgba(0, 0, 0, 0.7);
+    background: rgba(15, 23, 42, 0.72);
     color: white;
-    border-radius: var(--radius);
+    border-radius: 999px;
     font-size: 0.75rem;
     font-weight: 500;
     backdrop-filter: blur(4px);
@@ -942,7 +978,7 @@ header {
 .btn-add-to-cart, .btn-buy-now {
     flex: 1;
     padding: 1rem 1.5rem;
-    border-radius: var(--radius);
+    border-radius: 999px;
     font-weight: 600;
     font-size: 1rem;
     text-decoration: none;
@@ -1001,7 +1037,7 @@ header {
 .loading-spinner {
     background: var(--bg);
     padding: 2rem;
-    border-radius: var(--radius-lg);
+    border-radius: 24px;
     text-align: center;
     box-shadow: var(--shadow-lg);
 }
@@ -1036,7 +1072,7 @@ header {
     background: var(--bg);
     color: var(--text);
     padding: 1rem 1.5rem;
-    border-radius: var(--radius);
+    border-radius: 18px;
     box-shadow: var(--shadow-lg);
     border-left: 4px solid var(--primary);
     margin-bottom: 1rem;
@@ -1072,6 +1108,14 @@ header {
 
     .menu-toggle {
         display: none !important;
+    }
+}
+
+@media (min-width: 769px) and (max-width: 980px) {
+    .menu-toggle {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
     }
 }
 
@@ -1113,21 +1157,14 @@ header {
         display: flex;
     }
 
-    .menu-toggle {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-    }
-
     .welcome h1 {
         font-size: 2rem;
     }
 
     .animalstopurchase, .accessories {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 1.5rem;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 1.25rem;
     }
 }
 
@@ -1227,7 +1264,8 @@ header {
 
     .welcome {
         padding: 3rem 1rem 2rem;
-        margin: 0 -0.75rem 2rem;
+        margin: 0 0 2rem;
+        border-radius: 0 0 24px 24px;
     }
 
     .welcome h1 {
@@ -1236,7 +1274,7 @@ header {
 
     .welcome-stats {
         flex-direction: column;
-        gap: 1rem;
+        gap: 0.75rem;
     }
 
     .section-title {
@@ -1246,9 +1284,8 @@ header {
 
     .animalstopurchase,
     .accessories {
-        flex-direction: column;
-        align-items: stretch;
-        gap: 1.5rem;
+        grid-template-columns: 1fr;
+        gap: 1rem;
         margin-bottom: 3rem;
     }
 

@@ -1,21 +1,17 @@
 window.PetShopAuth = (function () {
   const USER_KEY = 'petShopUser';
-  const TOKEN_KEY = 'petShopToken';
 
   function getSession() {
     try {
       const user = JSON.parse(localStorage.getItem(USER_KEY) || 'null');
-      const token = localStorage.getItem(TOKEN_KEY) || '';
-      if (!user || !token) return null;
-      return { user, token };
+      return user ? { user } : null;
     } catch {
       return null;
     }
   }
 
-  function saveSession(user, token) {
+  function saveSession(user) {
     localStorage.setItem(USER_KEY, JSON.stringify(user));
-    localStorage.setItem(TOKEN_KEY, token);
     if (user.role === 'customer') {
       localStorage.setItem('petShopCustomer', JSON.stringify({
         name: user.name,
@@ -29,48 +25,53 @@ window.PetShopAuth = (function () {
 
   function clearSession() {
     localStorage.removeItem(USER_KEY);
-    localStorage.removeItem(TOKEN_KEY);
     localStorage.removeItem('petShopCustomer');
     localStorage.removeItem('sellerLoggedIn');
   }
 
   function getAuthHeader() {
-    const session = getSession();
-    return session ? { Authorization: session.token } : {};
+    return {};
+  }
+
+  async function postJson(url, payload) {
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify(payload)
+    });
+
+    const data = await response.json();
+    if (!response.ok) throw new Error(data.error || 'Request failed');
+    return data;
   }
 
   async function logout() {
-    const session = getSession();
-    if (session) {
-      try {
-        await fetch('/api/auth/logout', {
-          method: 'POST',
-          headers: { Authorization: session.token }
-        });
-      } catch {
-        // Ignore network errors during logout.
-      }
+    try {
+      await fetch('/api/auth/logout', {
+        method: 'POST',
+        credentials: 'include'
+      });
+    } catch {
+      // Ignore network errors during logout.
     }
     clearSession();
   }
 
   async function refreshSession() {
-    const session = getSession();
-    if (!session) return null;
-
     try {
       const response = await fetch('/api/auth/me', {
-        headers: { Authorization: session.token }
+        credentials: 'include'
       });
       if (!response.ok) {
         clearSession();
         return null;
       }
       const data = await response.json();
-      saveSession(data.user, session.token);
-      return { user: data.user, token: session.token };
+      saveSession(data.user);
+      return { user: data.user };
     } catch {
-      return session;
+      return getSession();
     }
   }
 
@@ -142,6 +143,14 @@ window.PetShopAuth = (function () {
       : `login.html?next=${encodeURIComponent(checkoutPath)}`;
   }
 
+  async function loginWithOtp(endpoint, payload) {
+    return postJson(endpoint, payload);
+  }
+
+  async function verifyOtp(endpoint, payload) {
+    return postJson(endpoint, payload);
+  }
+
   return {
     getSession,
     saveSession,
@@ -153,6 +162,8 @@ window.PetShopAuth = (function () {
     isSeller,
     updateHeaderAuth,
     bindHeaderAuth,
-    goToCheckout
+    goToCheckout,
+    loginWithOtp,
+    verifyOtp
   };
 })();

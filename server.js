@@ -19,9 +19,36 @@ const GOOGLE_HOSTED_DOMAIN = process.env.GOOGLE_HOSTED_DOMAIN || '';
 const OTP_TTL_MS = parseInt(process.env.OTP_TTL_MS || '600000', 10);
 const OTP_SECRET = process.env.OTP_SECRET || 'pet-shop-otp-secret';
 const DEFAULT_SELLER_EMAIL = process.env.DEFAULT_SELLER_EMAIL || 'seller@petshop.com';
+const SESSION_COOKIE_NAME = 'petshop_session';
+const SESSION_COOKIE_MAX_AGE = 1000 * 60 * 60 * 24 * 14;
 
 app.use(express.json({ limit: '1mb' }));
 app.use(express.static(__dirname));
+
+function parseCookies(cookieHeader = '') {
+  return cookieHeader.split(';').reduce((cookies, part) => {
+    const [rawKey, ...rawValue] = part.trim().split('=');
+    if (!rawKey) return cookies;
+    cookies[decodeURIComponent(rawKey)] = decodeURIComponent(rawValue.join('=') || '');
+    return cookies;
+  }, {});
+}
+
+function serializeCookie(name, value, options = {}) {
+  const segments = [`${encodeURIComponent(name)}=${encodeURIComponent(value)}`];
+  if (options.maxAge != null) segments.push(`Max-Age=${Math.floor(options.maxAge)}`);
+  segments.push(`Path=${options.path || '/'}`);
+  if (options.httpOnly !== false) segments.push('HttpOnly');
+  if (options.sameSite) segments.push(`SameSite=${options.sameSite}`);
+  if (options.secure) segments.push('Secure');
+  return segments.join('; ');
+}
+
+function extractSessionToken(req) {
+  const cookies = parseCookies(req.headers.cookie || '');
+  if (cookies[SESSION_COOKIE_NAME]) return cookies[SESSION_COOKIE_NAME];
+  return extractToken(req);
+}
 
 const googleClient = GOOGLE_CLIENT_ID ? new OAuth2Client(GOOGLE_CLIENT_ID) : null;
 
@@ -39,7 +66,7 @@ const defaultProducts = [
   { id: 'pet-collar', name: 'Pet Collar', price: 80, category: 'accessory', subcategory: 'gear', description: 'Durable collars to keep your pets safe and stylish.', image: 'petcollar.jpeg' },
   { id: 'net-carrier', name: 'Net Carrier', price: 200, category: 'accessory', subcategory: 'gear', description: 'Convenient and comfortable carriers for your pets with nets.', image: 'carrybag1.jpeg' },
   { id: 'shield-carrier', name: 'Shield Carrier', price: 250, category: 'accessory', subcategory: 'gear', description: 'Comfortable and stylish carriers with a protective shield.', image: 'carrybag2.jpeg' },
-  { id: 'pet-toys', name: 'Pet Toys', price: 150, category: 'accessory', subcategory: 'gear', description: 'Fun toys to keep your pets entertained and active.', image: 'pettoys.jpg' }
+  { id: 'pet-toys', name: 'Pet Toys', price: 150, category: 'accessory', subcategory: 'gear', description: 'Fun toys to keep your pets entertained and active.', image: 'pettoys.svg' }
 ];
 
 function inferSubcategory(product) {
@@ -266,7 +293,7 @@ function sanitizeUser(user) {
 
 function authorizeRole(role) {
   return (req, res, next) => {
-    const token = extractToken(req);
+    const token = extractSessionToken(req);
     const user = findUserByToken(token);
     if (!user || user.role !== role) {
       return res.status(401).json({ error: `${role.charAt(0).toUpperCase() + role.slice(1)} authorization required` });
@@ -290,14 +317,17 @@ app.get('/api/config/google-client-id', (_req, res) => {
 });
 
 app.get('/api/auth/me', (req, res) => {
-  const user = findUserByToken(extractToken(req));
+  const user = findUserByToken(extractSessionToken(req));
   if (!user) return res.status(401).json({ error: 'Not authenticated' });
   res.json({ user: sanitizeUser(user) });
 });
 
 app.post('/api/auth/logout', (req, res) => {
-  const token = extractToken(req);
-  if (!token) return res.json({ ok: true });
+  const token = extractSessionToken(req);
+  if (!token) {
+    res.setHeader('Set-Cookie', serializeCookie(SESSION_COOKIE_NAME, '', { maxAge: 0, httpOnly: true, sameSite: 'Lax' }));
+    return res.json({ ok: true });
+  }
 
   const users = readUsers();
   const user = users.find(item => item.token === token);
@@ -305,6 +335,7 @@ app.post('/api/auth/logout', (req, res) => {
     delete user.token;
     writeUsers(users);
   }
+  res.setHeader('Set-Cookie', serializeCookie(SESSION_COOKIE_NAME, '', { maxAge: 0, httpOnly: true, sameSite: 'Lax' }));
   res.json({ ok: true });
 });
 
@@ -364,7 +395,12 @@ app.post('/api/auth/login/verify', (req, res) => {
   user.token = token;
   writeUsers(users);
 
-  res.json({ token, user: sanitizeUser(user) });
+  res.setHeader('Set-Cookie', serializeCookie(SESSION_COOKIE_NAME, token, {
+    maxAge: SESSION_COOKIE_MAX_AGE / 1000,
+    httpOnly: true,
+    sameSite: 'Lax'
+  }));
+  res.json({ user: sanitizeUser(user) });
 });
 
 app.post('/api/auth/signup/request-otp', async (req, res) => {
@@ -451,7 +487,12 @@ app.post('/api/auth/signup/verify', (req, res) => {
   users.push(user);
   writeUsers(users);
 
-  res.json({ token, user: sanitizeUser(user) });
+  res.setHeader('Set-Cookie', serializeCookie(SESSION_COOKIE_NAME, token, {
+    maxAge: SESSION_COOKIE_MAX_AGE / 1000,
+    httpOnly: true,
+    sameSite: 'Lax'
+  }));
+  res.json({ user: sanitizeUser(user) });
 });
 
 app.post('/api/auth/login', (req, res) => {
@@ -470,7 +511,12 @@ app.post('/api/auth/login', (req, res) => {
   user.token = token;
   writeUsers(users);
 
-  res.json({ token, user: sanitizeUser(user) });
+  res.setHeader('Set-Cookie', serializeCookie(SESSION_COOKIE_NAME, token, {
+    maxAge: SESSION_COOKIE_MAX_AGE / 1000,
+    httpOnly: true,
+    sameSite: 'Lax'
+  }));
+  res.json({ user: sanitizeUser(user) });
 });
 
 app.post('/api/auth/signup', (req, res) => {
@@ -549,7 +595,12 @@ app.post('/api/auth/google', async (req, res) => {
 
     writeUsers(users);
     const user = readUsers().find(item => item.id === id);
-    res.json({ token, user: sanitizeUser(user) });
+    res.setHeader('Set-Cookie', serializeCookie(SESSION_COOKIE_NAME, token, {
+      maxAge: SESSION_COOKIE_MAX_AGE / 1000,
+      httpOnly: true,
+      sameSite: 'Lax'
+    }));
+    res.json({ user: sanitizeUser(user) });
   } catch (error) {
     console.error('Google auth error:', error);
     res.status(401).json({ error: 'Google sign-in failed' });
